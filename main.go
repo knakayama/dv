@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
@@ -11,14 +12,64 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/ec2/types"
 )
 
+var awsEndpoint = os.Getenv("AWS_ENDPOINT")
+var awsRegion = os.Getenv("DEFAULT_REGION")
+
 func makeClient() *ec2.Client {
-	cfg, err := config.LoadDefaultConfig(context.TODO())
+	endpointResolver := aws.EndpointResolverWithOptionsFunc(func(service, region string, options ...interface{}) (aws.Endpoint, error) {
+		if awsEndpoint != "" {
+			return aws.Endpoint{
+				PartitionID:   "aws",
+				URL:           awsEndpoint,
+				SigningRegion: awsRegion,
+			}, nil
+		}
+
+		return aws.Endpoint{}, &aws.EndpointNotFoundError{}
+	})
+
+	cfg, err := config.LoadDefaultConfig(
+		context.TODO(),
+		config.WithRegion(awsRegion),
+		config.WithEndpointResolverWithOptions(endpointResolver))
 
 	if err != nil {
 		log.Fatalf("Failed to load SDK configuration, %v", err)
 	}
 
 	return ec2.NewFromConfig(cfg)
+}
+
+func makeClients() []*ec2.Client {
+	var clients []*ec2.Client
+
+	for _, region := range listRegions(makeClient()) {
+		endpointResolver := aws.EndpointResolverWithOptionsFunc(func(service, region string, options ...interface{}) (aws.Endpoint, error) {
+			if awsEndpoint != "" {
+				return aws.Endpoint{
+					PartitionID:   "aws",
+					URL:           awsEndpoint,
+					SigningRegion: region,
+				}, nil
+			}
+
+			return aws.Endpoint{}, &aws.EndpointNotFoundError{}
+		})
+
+		cfg, err := config.LoadDefaultConfig(
+			context.TODO(),
+			config.WithRegion(*region.RegionName),
+			config.WithEndpointResolverWithOptions(endpointResolver),
+		)
+
+		if err != nil {
+			log.Fatalf("Failed to load SDK configuration, %v", err)
+		}
+
+		clients = append(clients, ec2.NewFromConfig(cfg))
+	}
+
+	return clients
 }
 
 func listRegions(client *ec2.Client) []types.Region {
@@ -32,23 +83,6 @@ func listRegions(client *ec2.Client) []types.Region {
 	}
 
 	return output.Regions
-}
-
-func makeClients() []*ec2.Client {
-	var clients []*ec2.Client
-
-	for _, region := range listRegions(makeClient()) {
-		cfg, err := config.LoadDefaultConfig(
-			context.TODO(),
-			config.WithRegion(*region.RegionName),
-		)
-		if err != nil {
-			log.Fatalf("Failed to load SDK configuration, %v", err)
-		}
-		clients = append(clients, ec2.NewFromConfig(cfg))
-	}
-
-	return clients
 }
 
 func listDefaultVpcs(client *ec2.Client) []types.Vpc {
@@ -94,7 +128,6 @@ func deleteIgws(client *ec2.Client, vpc types.Vpc) {
 			context.TODO(),
 			&ec2.DeleteInternetGatewayInput{
 				InternetGatewayId: igw.InternetGatewayId,
-				DryRun:            aws.Bool(true),
 			},
 		)
 
@@ -127,7 +160,6 @@ func deleteSubnets(client *ec2.Client, vpc types.Vpc) {
 			context.TODO(),
 			&ec2.DeleteSubnetInput{
 				SubnetId: subnet.SubnetId,
-				DryRun:   aws.Bool(true),
 			},
 		)
 
@@ -160,7 +192,6 @@ func deleteRouteTables(client *ec2.Client, vpc types.Vpc) {
 			context.TODO(),
 			&ec2.DeleteRouteTableInput{
 				RouteTableId: routeTable.RouteTableId,
-				DryRun:       aws.Bool(true),
 			},
 		)
 
@@ -193,7 +224,6 @@ func deleteAcls(client *ec2.Client, vpc types.Vpc) {
 			context.TODO(),
 			&ec2.DeleteNetworkAclInput{
 				NetworkAclId: acl.NetworkAclId,
-				DryRun:       aws.Bool(true),
 			},
 		)
 
@@ -224,13 +254,12 @@ func deleteSecurityGroups(client *ec2.Client, vpc types.Vpc) {
 		_, err := client.DeleteSecurityGroup(
 			context.TODO(),
 			&ec2.DeleteSecurityGroupInput{
-				DryRun:  aws.Bool(true),
 				GroupId: securityGroup.GroupId,
 			},
 		)
 
 		if err != nil {
-			log.Fatalf("Failed to a security groups, %v", err)
+			log.Fatalf("Failed to delete a security groups, %v", err)
 		}
 	}
 }
@@ -239,8 +268,7 @@ func deleteVpc(client *ec2.Client, vpc types.Vpc) {
 	_, err := client.DeleteVpc(
 		context.TODO(),
 		&ec2.DeleteVpcInput{
-			VpcId:  vpc.VpcId,
-			DryRun: aws.Bool(true),
+			VpcId: vpc.VpcId,
 		},
 	)
 
