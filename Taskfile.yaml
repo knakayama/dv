@@ -2,8 +2,17 @@ version: '3'
 
 tasks:
   start:
+    desc: |
+      Start Locakstack
     cmds:
       - poetry run localstack start -d
   stop:
+    desc: |
+      Stop Localstack
     cmds:
       - poetry run localstack stop
+  lint:install:
+    desc: |
+      Install a Git pre-commit hook script
+    cmds:
+      - poetry run pre-commit install
