@@ -1,0 +1,9 @@
+version: '3'
+
+tasks:
+  start:
+    cmds:
+      - poetry run localstack start -d
+  stop:
+    cmds:
+      - poetry run localstack stop

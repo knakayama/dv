@@ -12,16 +12,15 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/ec2/types"
 )
 
-var awsEndpoint = os.Getenv("AWS_ENDPOINT")
-var awsRegion = os.Getenv("DEFAULT_REGION")
+func makeConfig(region string) aws.Config {
+	awsEndpoint := os.Getenv("AWS_ENDPOINT")
 
-func makeClient() *ec2.Client {
 	endpointResolver := aws.EndpointResolverWithOptionsFunc(func(service, region string, options ...interface{}) (aws.Endpoint, error) {
 		if awsEndpoint != "" {
 			return aws.Endpoint{
 				PartitionID:   "aws",
 				URL:           awsEndpoint,
-				SigningRegion: awsRegion,
+				SigningRegion: region,
 			}, nil
 		}
 
@@ -30,43 +29,27 @@ func makeClient() *ec2.Client {
 
 	cfg, err := config.LoadDefaultConfig(
 		context.TODO(),
-		config.WithRegion(awsRegion),
+		config.WithRegion(region),
 		config.WithEndpointResolverWithOptions(endpointResolver))
 
 	if err != nil {
 		log.Fatalf("Failed to load SDK configuration, %v", err)
 	}
 
-	return ec2.NewFromConfig(cfg)
+	return cfg
+}
+
+func makeClient() *ec2.Client {
+	region := os.Getenv("DEFAULT_REGION")
+
+	return ec2.NewFromConfig(makeConfig(region))
 }
 
 func makeClients() []*ec2.Client {
 	var clients []*ec2.Client
 
 	for _, region := range listRegions(makeClient()) {
-		endpointResolver := aws.EndpointResolverWithOptionsFunc(func(service, region string, options ...interface{}) (aws.Endpoint, error) {
-			if awsEndpoint != "" {
-				return aws.Endpoint{
-					PartitionID:   "aws",
-					URL:           awsEndpoint,
-					SigningRegion: region,
-				}, nil
-			}
-
-			return aws.Endpoint{}, &aws.EndpointNotFoundError{}
-		})
-
-		cfg, err := config.LoadDefaultConfig(
-			context.TODO(),
-			config.WithRegion(*region.RegionName),
-			config.WithEndpointResolverWithOptions(endpointResolver),
-		)
-
-		if err != nil {
-			log.Fatalf("Failed to load SDK configuration, %v", err)
-		}
-
-		clients = append(clients, ec2.NewFromConfig(cfg))
+		clients = append(clients, ec2.NewFromConfig(makeConfig(*region.RegionName)))
 	}
 
 	return clients
