@@ -1,0 +1,16 @@
+run:
+  go: "1.19"
+  skip-dirs:
+    - tmp
+
+linters:
+  enable:
+    - thelper
+    - gofumpt
+    - tparallel
+    - unconvert
+    - unparam
+    - revive
+    - forbidigo
+    - tagliatelle
+    - misspell

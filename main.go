@@ -31,7 +31,6 @@ func makeConfig(region string) aws.Config {
 		context.TODO(),
 		config.WithRegion(region),
 		config.WithEndpointResolverWithOptions(endpointResolver))
-
 	if err != nil {
 		log.Fatalf("Failed to load SDK configuration, %v", err)
 	}
@@ -60,7 +59,6 @@ func listRegions(client *ec2.Client) []types.Region {
 		context.TODO(),
 		&ec2.DescribeRegionsInput{},
 	)
-
 	if err != nil {
 		log.Fatalf("Failed to list regions, %v", err)
 	}
@@ -74,7 +72,6 @@ func listDefaultVpcs(client *ec2.Client) []types.Vpc {
 	output, err := client.DescribeVpcs(
 		context.TODO(),
 		&ec2.DescribeVpcsInput{})
-
 	if err != nil {
 		log.Fatalf("Failed to list default vpcs, %v", err)
 	}
@@ -100,12 +97,12 @@ func deleteIgws(client *ec2.Client, vpc types.Vpc) {
 			},
 		},
 	)
-
 	if err != nil {
 		log.Fatalf("Failed to list igws, %v", err)
 	}
 
 	for _, igw := range output.InternetGateways {
+		//nolint:forbidigo
 		fmt.Println(*igw.InternetGatewayId)
 		_, err := client.DeleteInternetGateway(
 			context.TODO(),
@@ -113,7 +110,6 @@ func deleteIgws(client *ec2.Client, vpc types.Vpc) {
 				InternetGatewayId: igw.InternetGatewayId,
 			},
 		)
-
 		if err != nil {
 			log.Fatalf("Failed to delete an igw, %v", err)
 		}
@@ -132,12 +128,12 @@ func deleteSubnets(client *ec2.Client, vpc types.Vpc) {
 			},
 		},
 	)
-
 	if err != nil {
 		log.Fatalf("Failed to list subnets, %v", err)
 	}
 
 	for _, subnet := range output.Subnets {
+		//nolint:forbidigo
 		fmt.Println(*subnet.SubnetId)
 		_, err := client.DeleteSubnet(
 			context.TODO(),
@@ -145,7 +141,6 @@ func deleteSubnets(client *ec2.Client, vpc types.Vpc) {
 				SubnetId: subnet.SubnetId,
 			},
 		)
-
 		if err != nil {
 			log.Fatalf("Failed to delete a subnet, %v", err)
 		}
@@ -164,12 +159,12 @@ func deleteRouteTables(client *ec2.Client, vpc types.Vpc) {
 			},
 		},
 	)
-
 	if err != nil {
 		log.Fatalf("Failed to list route tables, %v", err)
 	}
 
 	for _, routeTable := range output.RouteTables {
+		//nolint:forbidigo
 		fmt.Println(*routeTable.RouteTableId)
 		_, err := client.DeleteRouteTable(
 			context.TODO(),
@@ -177,7 +172,6 @@ func deleteRouteTables(client *ec2.Client, vpc types.Vpc) {
 				RouteTableId: routeTable.RouteTableId,
 			},
 		)
-
 		if err != nil {
 			log.Fatalf("Failed to delete a route table, %v", err)
 		}
@@ -196,12 +190,12 @@ func deleteAcls(client *ec2.Client, vpc types.Vpc) {
 			},
 		},
 	)
-
 	if err != nil {
 		log.Fatalf("Failed to list network acls, %v", err)
 	}
 
 	for _, acl := range output.NetworkAcls {
+		//nolint:forbidigo
 		fmt.Println(*acl.NetworkAclId)
 		_, err := client.DeleteNetworkAcl(
 			context.TODO(),
@@ -209,7 +203,6 @@ func deleteAcls(client *ec2.Client, vpc types.Vpc) {
 				NetworkAclId: acl.NetworkAclId,
 			},
 		)
-
 		if err != nil {
 			log.Fatalf("Failed to delete a network acl, %v", err)
 		}
@@ -228,7 +221,6 @@ func deleteSecurityGroups(client *ec2.Client, vpc types.Vpc) {
 			},
 		},
 	)
-
 	if err != nil {
 		log.Fatalf("Failed to list security groups, %v", err)
 	}
@@ -240,7 +232,6 @@ func deleteSecurityGroups(client *ec2.Client, vpc types.Vpc) {
 				GroupId: securityGroup.GroupId,
 			},
 		)
-
 		if err != nil {
 			log.Fatalf("Failed to delete a security groups, %v", err)
 		}
@@ -254,7 +245,6 @@ func deleteVpc(client *ec2.Client, vpc types.Vpc) {
 			VpcId: vpc.VpcId,
 		},
 	)
-
 	if err != nil {
 		log.Fatalf("Failed to delete a vpc, %v", err)
 	}
@@ -263,6 +253,7 @@ func deleteVpc(client *ec2.Client, vpc types.Vpc) {
 func main() {
 	for _, client := range makeClients() {
 		for _, vpc := range listDefaultVpcs(client) {
+			//nolint:forbidigo
 			fmt.Println(*vpc.VpcId)
 			deleteIgws(client, vpc)
 			deleteSubnets(client, vpc)
