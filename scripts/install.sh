@@ -26,3 +26,13 @@ if [[ ! -x "$ec_path" ]]; then
   tar xzpvf "$tmp_path" -O > "$ec_path"
   chmod +x "$ec_path"
 fi
+
+gitleaks_path="${ROOT_DIR}/bin/gitleaks"
+if [[ ! -x "$gitleaks_path" ]]; then
+  tmp_path="$(mktemp)"
+  curl \
+    -sSfL "https://github.com/zricethezav/gitleaks/releases/download/v8.11.2/gitleaks_8.11.2_darwin_x64.tar.gz" \
+    -o "$tmp_path"
+  tar xzpvf "$tmp_path" "gitleaks"
+  mv -v "gitleaks" "$gitleaks_path"
+fi
