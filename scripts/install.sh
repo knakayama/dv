@@ -2,6 +2,11 @@
 
 TOOLS_DIR="$(cd ${0%/*}/../tools && pwd -P)"
 
+if ! type "localstack" &>/dev/null; then
+  # TODO: How can we pin a version with pipx?
+  pipx install localstack
+fi
+
 if [[ ! -x "${TOOLS_DIR}/golangci-lint" ]]; then
   curl -sSfL "https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh" | sh -s "v1.49.0"
 fi
