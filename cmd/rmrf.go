@@ -7,17 +7,16 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type rmAllCmd struct {
+type rmrfCmd struct {
 	cmd *cobra.Command
 }
 
-func newRmAllCmd() *rmAllCmd {
-	root := &rmAllCmd{
+func newRmrfCmd() *rmrfCmd {
+	root := &rmrfCmd{
 		cmd: &cobra.Command{
-			Use:           "rm-all",
+			Use:           "rmrf",
 			Short:         "Remove default VPCs in all AWS regions",
-			Long:          `Remove default VPCs in all AWS regions`,
-			Aliases:       []string{"a"},
+			Long:          `This command remove default VPCs in all AWS regions.`,
 			SilenceUsage:  true,
 			SilenceErrors: true,
 			Args:          cobra.NoArgs,
