@@ -3,11 +3,11 @@ version: "3"
 tasks:
   aws:start:
     cmds:
-      - poetry run localstack start -d
+      - localstack start -d
 
   aws:stop:
     cmds:
-      - poetry run localstack stop
+      - localstack stop
 
   lint:
     cmds:
