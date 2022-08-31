@@ -3,7 +3,7 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/knakayama/remove-aws-default-vpcs/internal"
+	"github.com/knakayama/dv/internal"
 	"github.com/spf13/cobra"
 )
 

@@ -1,4 +1,4 @@
-module github.com/knakayama/remove-aws-default-vpcs
+module github.com/knakayama/dv
 
 go 1.19
 

@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"github.com/knakayama/remove-aws-default-vpcs/cmd"
+	"github.com/knakayama/dv/cmd"
 )
 
 func main() {
