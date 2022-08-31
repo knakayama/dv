@@ -1,23 +1,23 @@
 #!/usr/bin/env bash -xeou pipefail
 
-ROOT_DIR="$(cd ${0%/*}/.. && pwd -P)"
+TOOLS_DIR="$(cd ${0%/*}/../tools && pwd -P)"
 
-if [[ ! -x "${ROOT_DIR}/bin/golangci-lint" ]]; then
+if [[ ! -x "${TOOLS_DIR}/golangci-lint" ]]; then
   curl -sSfL "https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh" | sh -s "v1.49.0"
 fi
 
-if [[ ! -x "${ROOT_DIR}/bin/task" ]]; then
-  sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b "${ROOT_DIR}/bin" "v3.14.1"
+if [[ ! -x "${TOOLS_DIR}/task" ]]; then
+  sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b "$TOOLS_DIR" "v3.14.1"
 fi
 
-if [[ ! -x "${ROOT_DIR}/bin/gofumpt" ]]; then
+if [[ ! -x "${TOOLS_DIR}/gofumpt" ]]; then
   curl \
     -sSfL "https://github.com/mvdan/gofumpt/releases/download/v0.3.1/gofumpt_v0.3.1_darwin_amd64" \
-    -o "${ROOT_DIR}/bin/gofumpt"
-  chmod +x "${ROOT_DIR}/bin/gofumpt"
+    -o "${TOOLS_DIR}/gofumpt"
+  chmod +x "${TOOLS_DIR}/gofumpt"
 fi
 
-ec_path="${ROOT_DIR}/bin/ec"
+ec_path="${TOOLS_DIR}/ec"
 if [[ ! -x "$ec_path" ]]; then
   tmp_path="$(mktemp)"
   curl \
@@ -27,7 +27,7 @@ if [[ ! -x "$ec_path" ]]; then
   chmod +x "$ec_path"
 fi
 
-gitleaks_path="${ROOT_DIR}/bin/gitleaks"
+gitleaks_path="${TOOLS_DIR}/gitleaks"
 if [[ ! -x "$gitleaks_path" ]]; then
   tmp_path="$(mktemp)"
   curl \

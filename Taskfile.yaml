@@ -23,15 +23,15 @@ tasks:
 
   lint:ec:
     cmds:
-      - ./bin/ec
+      - ./tools/ec
 
   lint:golangci-lint:
     cmds:
-      - ./bin/golangci-lint run
+      - ./tools/golangci-lint run
 
   lint:gitleaks:
     cmds:
-      - ./bin/gitleaks detect
+      - ./tools/gitleaks detect
 
   lint:setup:
     cmds:
