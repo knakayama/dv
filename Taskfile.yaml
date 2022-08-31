@@ -4,10 +4,16 @@ tasks:
   aws:start:
     cmds:
       - localstack start -d
+      - localstack wait
 
   aws:stop:
     cmds:
       - localstack stop
+
+  aws:restart:
+    cmds:
+      - task: aws:stop
+      - task: aws:start
 
   lint:
     cmds:
