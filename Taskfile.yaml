@@ -26,14 +26,6 @@ tasks:
     cmds:
       - cp -pvf ./scripts/pre-commit.sh .git/hooks/pre-commit
 
-  lint:install:
-    cmds:
-      - poetry run pre-commit install
-
   tool:install:
     cmds:
       - ./scripts/install.sh
-
-  tool:clean:
-    cmds:
-      - rm ./bin/*
