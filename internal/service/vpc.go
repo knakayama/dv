@@ -6,6 +6,7 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	"github.com/aws/aws-sdk-go-v2/service/ec2/types"
+	"github.com/knakayama/dv/internal/entity"
 )
 
 func ListDefaultVpcs(client *ec2.Client) []types.Vpc {
@@ -37,4 +38,39 @@ func DeleteVpc(client *ec2.Client, vpc types.Vpc) {
 	if err != nil {
 		log.Fatalf("Failed to delete a vpc, %v", err)
 	}
+}
+
+func RemoveVpc() error {
+	client := entity.NewClient()
+
+	vpc, err := entity.NewVpc(client)
+	if err != nil {
+		return err
+	}
+
+	if err := vpc.NewIgw().Remove(); err != nil {
+		return err
+	}
+
+	if err := vpc.NewSubnet().Remove(); err != nil {
+		return err
+	}
+
+	if err := vpc.NewRouteTable().Remove(); err != nil {
+		return err
+	}
+
+	if err := vpc.NewAcl().Remove(); err != nil {
+		return err
+	}
+
+	if err := vpc.NewSecurityGroup().Remove(); err != nil {
+		return err
+	}
+
+	if err := vpc.Remove(); err != nil {
+		return err
+	}
+
+	return nil
 }
