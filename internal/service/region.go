@@ -3,12 +3,11 @@ package service
 import (
 	"fmt"
 
-	"github.com/knakayama/dv/internal/entity/client"
-	"github.com/knakayama/dv/internal/entity/region"
+	"github.com/knakayama/dv/internal/entity"
 )
 
 func ListRegions() error {
-	output, err := region.List((client.New()))
+	output, err := entity.NewRegion(entity.NewClient()).List()
 	if err != nil {
 		return err
 	}

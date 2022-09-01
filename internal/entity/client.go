@@ -1,4 +1,4 @@
-package client
+package entity
 
 import (
 	"context"
@@ -36,7 +36,7 @@ func makeConfig(region string) aws.Config {
 	return cfg
 }
 
-func New() *ec2.Client {
+func NewClient() *ec2.Client {
 	region := os.Getenv("DEFAULT_REGION")
 
 	return ec2.NewFromConfig(makeConfig(region))

@@ -22,4 +22,4 @@ linters-settings:
         severity: warning
         disabled: false
         arguments:
-          - ["ID"] # AllowList
+          - ["ID", "ACL"] # AllowList

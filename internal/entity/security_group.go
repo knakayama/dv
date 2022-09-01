@@ -1,4 +1,4 @@
-package sg
+package entity
 
 import (
 	"context"
@@ -7,19 +7,22 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	"github.com/aws/aws-sdk-go-v2/service/ec2/types"
-	"github.com/knakayama/dv/internal/util"
 )
 
-func ids(client *ec2.Client, vpcIds []*string) ([]*string, error) {
+type SecurityGroup struct {
+	vpc *Vpc
+}
+
+func (sg *SecurityGroup) ids() ([]*string, error) {
 	var sgIds []*string
 
-	output, err := client.DescribeSecurityGroups(
+	output, err := sg.vpc.Client.DescribeSecurityGroups(
 		context.TODO(),
 		&ec2.DescribeSecurityGroupsInput{
 			Filters: []types.Filter{
 				{
 					Name:   aws.String("vpc-id"),
-					Values: util.StrListFrom(vpcIds),
+					Values: []string{*sg.vpc.Id},
 				},
 			},
 		},
@@ -35,13 +38,13 @@ func ids(client *ec2.Client, vpcIds []*string) ([]*string, error) {
 	return sgIds, nil
 }
 
-func Remove(client *ec2.Client, vpcIds []*string) error {
-	sgIds, _ := ids(client, vpcIds)
+func (sg *SecurityGroup) Remove() error {
+	sgIds, _ := sg.ids()
 
 	for _, sgId := range sgIds {
 		//nolint:forbidigo
 		fmt.Println(*sgId)
-		_, err := client.DeleteSecurityGroup(
+		_, err := sg.vpc.Client.DeleteSecurityGroup(
 			context.TODO(),
 			&ec2.DeleteSecurityGroupInput{
 				GroupId: sgId,
@@ -52,4 +55,10 @@ func Remove(client *ec2.Client, vpcIds []*string) error {
 		}
 	}
 	return nil
+}
+
+func (vpc *Vpc) NewSecurityGroup() *SecurityGroup {
+	return &SecurityGroup{
+		vpc: vpc,
+	}
 }

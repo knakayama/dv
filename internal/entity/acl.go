@@ -1,4 +1,4 @@
-package acl
+package entity
 
 import (
 	"context"
@@ -7,19 +7,22 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	"github.com/aws/aws-sdk-go-v2/service/ec2/types"
-	"github.com/knakayama/dv/internal/util"
 )
 
-func ids(client *ec2.Client, vpcIds []*string) ([]*string, error) {
+type Acl struct {
+	vpc *Vpc
+}
+
+func (acl *Acl) ids() ([]*string, error) {
 	var aclIds []*string
 
-	output, err := client.DescribeNetworkAcls(
+	output, err := acl.vpc.Client.DescribeNetworkAcls(
 		context.TODO(),
 		&ec2.DescribeNetworkAclsInput{
 			Filters: []types.Filter{
 				{
 					Name:   aws.String("vpc-id"),
-					Values: util.StrListFrom(vpcIds),
+					Values: []string{*acl.vpc.Id},
 				},
 			},
 		},
@@ -35,13 +38,13 @@ func ids(client *ec2.Client, vpcIds []*string) ([]*string, error) {
 	return aclIds, nil
 }
 
-func Remove(client *ec2.Client, vpcIds []*string) error {
-	aclIds, _ := ids(client, vpcIds)
+func (acl *Acl) Remove() error {
+	aclIds, _ := acl.ids()
 
 	for _, aclId := range aclIds {
 		//nolint:forbidigo
 		fmt.Println(*aclId)
-		_, err := client.DeleteNetworkAcl(
+		_, err := acl.vpc.Client.DeleteNetworkAcl(
 			context.TODO(),
 			&ec2.DeleteNetworkAclInput{
 				NetworkAclId: aclId,
@@ -52,4 +55,10 @@ func Remove(client *ec2.Client, vpcIds []*string) error {
 		}
 	}
 	return nil
+}
+
+func (vpc *Vpc) NewAcl() *Acl {
+	return &Acl{
+		vpc: vpc,
+	}
 }

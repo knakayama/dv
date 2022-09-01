@@ -19,7 +19,7 @@ func newRmCmd() *rmCmd {
 			SilenceErrors: true,
 			Args:          cobra.NoArgs,
 			RunE: func(cmd *cobra.Command, args []string) error {
-				return service.RemoveVpc()
+				return service.Execute()
 			},
 		},
 	}

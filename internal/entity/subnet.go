@@ -1,4 +1,4 @@
-package subnet
+package entity
 
 import (
 	"context"
@@ -7,19 +7,22 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	"github.com/aws/aws-sdk-go-v2/service/ec2/types"
-	"github.com/knakayama/dv/internal/util"
 )
 
-func ids(client *ec2.Client, vpcIds []*string) ([]*string, error) {
+type Subnet struct {
+	vpc *Vpc
+}
+
+func (subnet *Subnet) ids() ([]*string, error) {
 	var subnetIds []*string
 
-	output, err := client.DescribeSubnets(
+	output, err := subnet.vpc.Client.DescribeSubnets(
 		context.TODO(),
 		&ec2.DescribeSubnetsInput{
 			Filters: []types.Filter{
 				{
 					Name:   aws.String("vpc-id"),
-					Values: util.StrListFrom(vpcIds),
+					Values: []string{*subnet.vpc.Id},
 				},
 			},
 		},
@@ -35,13 +38,13 @@ func ids(client *ec2.Client, vpcIds []*string) ([]*string, error) {
 	return subnetIds, nil
 }
 
-func Remove(client *ec2.Client, vpcIds []*string) error {
-	subnetIds, _ := ids(client, vpcIds)
+func (subnet *Subnet) Remove() error {
+	subnetIds, _ := subnet.ids()
 
 	for _, subnetId := range subnetIds {
 		//nolint:forbidigo
 		fmt.Println(*subnetId)
-		_, err := client.DeleteSubnet(
+		_, err := subnet.vpc.Client.DeleteSubnet(
 			context.TODO(),
 			&ec2.DeleteSubnetInput{
 				SubnetId: subnetId,
@@ -52,4 +55,10 @@ func Remove(client *ec2.Client, vpcIds []*string) error {
 		}
 	}
 	return nil
+}
+
+func (vpc *Vpc) NewSubnet() *Subnet {
+	return &Subnet{
+		vpc: vpc,
+	}
 }

@@ -1,4 +1,4 @@
-package igw
+package entity
 
 import (
 	"context"
@@ -7,19 +7,22 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	"github.com/aws/aws-sdk-go-v2/service/ec2/types"
-	"github.com/knakayama/dv/internal/util"
 )
 
-func ids(client *ec2.Client, vpcIds []*string) ([]*string, error) {
+type Igw struct {
+	vpc *Vpc
+}
+
+func (igw *Igw) ids() ([]*string, error) {
 	var igwIds []*string
 
-	output, err := client.DescribeInternetGateways(
+	output, err := igw.vpc.Client.DescribeInternetGateways(
 		context.TODO(),
 		&ec2.DescribeInternetGatewaysInput{
 			Filters: []types.Filter{
 				{
 					Name:   aws.String("attachment.vpc-id"),
-					Values: util.StrListFrom(vpcIds),
+					Values: []string{*igw.vpc.Id},
 				},
 			},
 		},
@@ -35,13 +38,13 @@ func ids(client *ec2.Client, vpcIds []*string) ([]*string, error) {
 	return igwIds, nil
 }
 
-func Remove(client *ec2.Client, vpcIds []*string) error {
-	igwIds, _ := ids(client, vpcIds)
+func (igw *Igw) Remove() error {
+	igwIds, _ := igw.ids()
 
 	for _, igwId := range igwIds {
 		//nolint:forbidigo
 		fmt.Println(*igwId)
-		_, err := client.DeleteInternetGateway(
+		_, err := igw.vpc.Client.DeleteInternetGateway(
 			context.TODO(),
 			&ec2.DeleteInternetGatewayInput{
 				InternetGatewayId: igwId,
@@ -52,4 +55,10 @@ func Remove(client *ec2.Client, vpcIds []*string) error {
 		}
 	}
 	return nil
+}
+
+func (vpc *Vpc) NewIgw() *Igw {
+	return &Igw{
+		vpc: vpc,
+	}
 }

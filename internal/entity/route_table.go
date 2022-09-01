@@ -1,4 +1,4 @@
-package rtb
+package entity
 
 import (
 	"context"
@@ -7,19 +7,22 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	"github.com/aws/aws-sdk-go-v2/service/ec2/types"
-	"github.com/knakayama/dv/internal/util"
 )
 
-func ids(client *ec2.Client, vpcIds []*string) ([]*string, error) {
+type RouteTable struct {
+	vpc *Vpc
+}
+
+func (rtb *RouteTable) ids() ([]*string, error) {
 	var routeTableIds []*string
 
-	output, err := client.DescribeRouteTables(
+	output, err := rtb.vpc.Client.DescribeRouteTables(
 		context.TODO(),
 		&ec2.DescribeRouteTablesInput{
 			Filters: []types.Filter{
 				{
 					Name:   aws.String("vpc-id"),
-					Values: util.StrListFrom(vpcIds),
+					Values: []string{*rtb.vpc.Id},
 				},
 			},
 		},
@@ -35,13 +38,13 @@ func ids(client *ec2.Client, vpcIds []*string) ([]*string, error) {
 	return routeTableIds, nil
 }
 
-func Remove(client *ec2.Client, vpcIds []*string) error {
-	routeTableIds, _ := ids(client, vpcIds)
+func (rtb *RouteTable) Remove() error {
+	routeTableIds, _ := rtb.ids()
 
 	for _, routeTableId := range routeTableIds {
 		//nolint:forbidigo
 		fmt.Println(*routeTableId)
-		_, err := client.DeleteRouteTable(
+		_, err := rtb.vpc.Client.DeleteRouteTable(
 			context.TODO(),
 			&ec2.DeleteRouteTableInput{
 				RouteTableId: routeTableId,
@@ -52,4 +55,10 @@ func Remove(client *ec2.Client, vpcIds []*string) error {
 		}
 	}
 	return nil
+}
+
+func (vpc *Vpc) NewRouteTable() *RouteTable {
+	return &RouteTable{
+		vpc: vpc,
+	}
 }
