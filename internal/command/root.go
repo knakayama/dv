@@ -38,6 +38,7 @@ Aside from that, you can remove a VPC in each region.
 
 	root.cmd.AddCommand(
 		newRmrfCmd().cmd,
+		newRmCmd().cmd,
 	)
 
 	return root
