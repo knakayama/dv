@@ -1,5 +1,5 @@
 #!/usr/bin/env bash -xeuo pipefail
 
-./tools/task lint
+task lint
 
 git add $(git diff --cached --name-only --diff-filter=ACMR)
