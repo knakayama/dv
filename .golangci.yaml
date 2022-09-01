@@ -14,3 +14,12 @@ linters:
     - forbidigo
     - tagliatelle
     - misspell
+
+linters-settings:
+  revive:
+    rules:
+      - name: var-naming
+        severity: warning
+        disabled: false
+        arguments:
+          - ["ID"] # AllowList
