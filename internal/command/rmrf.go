@@ -1,9 +1,9 @@
-package cmd
+package command
 
 import (
 	"fmt"
 
-	"github.com/knakayama/dv/internal"
+	"github.com/knakayama/dv/internal/service"
 	"github.com/spf13/cobra"
 )
 
@@ -21,16 +21,16 @@ func newRmrfCmd() *rmrfCmd {
 			SilenceErrors: true,
 			Args:          cobra.NoArgs,
 			Run: func(cmd *cobra.Command, args []string) {
-				for _, client := range internal.MakeClients() {
-					for _, vpc := range internal.ListDefaultVpcs(client) {
+				for _, client := range service.MakeClients() {
+					for _, vpc := range service.ListDefaultVpcs(client) {
 						//nolint:forbidigo
 						fmt.Println(*vpc.VpcId)
-						internal.DeleteIgws(client, vpc)
-						internal.DeleteSubnets(client, vpc)
-						internal.DeleteRouteTables(client, vpc)
-						internal.DeleteAcls(client, vpc)
-						internal.DeleteSecurityGroups(client, vpc)
-						internal.DeleteVpc(client, vpc)
+						service.DeleteIgws(client, vpc)
+						service.DeleteSubnets(client, vpc)
+						service.DeleteRouteTables(client, vpc)
+						service.DeleteAcls(client, vpc)
+						service.DeleteSecurityGroups(client, vpc)
+						service.DeleteVpc(client, vpc)
 					}
 				}
 			},
