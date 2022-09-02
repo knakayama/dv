@@ -1,10 +1,19 @@
 package executor
 
 import (
+	"fmt"
+
 	"github.com/knakayama/dv/internal/entity"
 )
 
-func remove(region string) error {
+func remove(region string, yes bool) error {
+	if !yes {
+		// TODO: pretty print
+		//nolint:forbidigo
+		fmt.Printf("%s skipped...\n", region)
+		return nil
+	}
+
 	vpc, err := entity.NewVpc(entity.NewClient(region))
 	if err != nil {
 		return err
@@ -41,12 +50,12 @@ func remove(region string) error {
 	return nil
 }
 
-func RemoveVpc(region string) error {
+func RemoveVpc(region string, yes bool) error {
 	if err := validateRegion(region); err != nil {
 		return err
 	}
 
-	if err := remove(region); err != nil {
+	if err := remove(region, yes); err != nil {
 		return err
 	}
 
