@@ -13,11 +13,11 @@ func newTable() table.Writer {
 	return t
 }
 
-func TableFrom(keyValue map[string]string) {
+func TableFrom(m map[string]string) {
 	t := newTable()
 	t.AppendHeader(table.Row{"Region", "Default VPC"})
 
-	for k, v := range keyValue {
+	for k, v := range m {
 		t.AppendRows([]table.Row{
 			{k, v},
 		})
