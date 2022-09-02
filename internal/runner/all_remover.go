@@ -1,27 +1,48 @@
 package runner
 
-import (
-	"fmt"
-
-	"github.com/knakayama/dv/internal/service"
-)
+import "github.com/knakayama/dv/internal/entity"
 
 type AllRemover struct{}
 
 func (a *AllRemover) Run(_ []string) error {
-	for _, client := range service.MakeClients() {
-		for _, vpc := range service.ListDefaultVpcs(client) {
-			//nolint:forbidigo
-			fmt.Println(*vpc.VpcId)
-			service.DeleteIgws(client, vpc)
-			service.DeleteSubnets(client, vpc)
-			service.DeleteRouteTables(client, vpc)
-			service.DeleteAcls(client, vpc)
-			service.DeleteSecurityGroups(client, vpc)
-			service.DeleteVpc(client, vpc)
-		}
+	out, err := entity.NewRegion(entity.NewDefaultClient()).List()
+	if err != nil {
+		return err
 	}
 
-	// TODO: Return an error
+	for _, region := range out.Regions {
+		vpc, err := entity.NewVpc(entity.NewClient(*region.RegionName))
+		if err != nil {
+			return err
+		}
+
+		if vpc.Id == nil {
+			return errVpcNotFound
+		}
+
+		if err := vpc.NewIgw().Remove(); err != nil {
+			return err
+		}
+
+		if err := vpc.NewSubnet().Remove(); err != nil {
+			return err
+		}
+
+		if err := vpc.NewRouteTable().Remove(); err != nil {
+			return err
+		}
+
+		if err := vpc.NewAcl().Remove(); err != nil {
+			return err
+		}
+
+		if err := vpc.NewSecurityGroup().Remove(); err != nil {
+			return err
+		}
+
+		if err := vpc.Remove(); err != nil {
+			return err
+		}
+	}
 	return nil
 }
