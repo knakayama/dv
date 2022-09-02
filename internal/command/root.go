@@ -3,7 +3,7 @@ package command
 import (
 	"log"
 
-	"github.com/knakayama/dv/internal/runner"
+	"github.com/knakayama/dv/internal/executor"
 	"github.com/spf13/cobra"
 )
 
@@ -48,8 +48,8 @@ Aside from that, you can remove a VPC in each region.
 	return root
 }
 
-func runE(r runner.Runner) runEFuncType {
+func runE(e executor.Executor) runEFuncType {
 	return func(cmd *cobra.Command, args []string) error {
-		return r.Run(args)
+		return e.Run(args)
 	}
 }

@@ -1,7 +1,7 @@
 package command
 
 import (
-	"github.com/knakayama/dv/internal/runner"
+	"github.com/knakayama/dv/internal/executor"
 	"github.com/spf13/cobra"
 )
 
@@ -18,7 +18,7 @@ func newlsCmd() *lsCmd {
 			SilenceUsage:  true,
 			SilenceErrors: true,
 			Args:          cobra.NoArgs,
-			RunE:          runE(&runner.Lister{}),
+			RunE:          runE(&executor.Lister{}),
 		},
 	}
 
