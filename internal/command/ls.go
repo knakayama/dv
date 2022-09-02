@@ -9,7 +9,7 @@ type lsCmd struct {
 	cmd *cobra.Command
 }
 
-func newlsCmd() *lsCmd {
+func newLsCmd() *lsCmd {
 	root := &lsCmd{
 		cmd: &cobra.Command{
 			Use:           "ls",
