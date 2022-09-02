@@ -2,12 +2,12 @@ package service
 
 import (
 	"context"
-	"fmt"
 	"log"
 
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	"github.com/aws/aws-sdk-go-v2/service/ec2/types"
 	"github.com/knakayama/dv/internal/entity"
+	"github.com/knakayama/dv/internal/presenter"
 )
 
 func ListDefaultVpcs(client *ec2.Client) []types.Vpc {
@@ -75,6 +75,8 @@ func RemoveVpc() error {
 }
 
 func ListVpcs() error {
+	regionVpc := make(map[string]string)
+
 	output, err := entity.NewRegion(entity.NewDefaultClient()).List()
 	if err != nil {
 		return err
@@ -85,12 +87,10 @@ func ListVpcs() error {
 		if err != nil {
 			return err
 		}
-		// TODO: To be pretty printed
-		//nolint:forbidigo
-		fmt.Println(*region.RegionName)
-		//nolint:forbidigo
-		fmt.Println(*vpc.Id)
+		regionVpc[*region.RegionName] = *vpc.Id
 	}
+
+	presenter.PrintTableIn(regionVpc)
 
 	return nil
 }
