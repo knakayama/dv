@@ -6,12 +6,7 @@ import (
 
 type Remover struct{}
 
-func (r *Remover) Run(args []string) error {
-	region := args[0]
-	if err := validateRegion(region); err != nil {
-		return err
-	}
-
+func remove(region string) error {
 	vpc, err := entity.NewVpc(entity.NewClient(region))
 	if err != nil {
 		return err
@@ -42,6 +37,19 @@ func (r *Remover) Run(args []string) error {
 	}
 
 	if err := vpc.Remove(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *Remover) Run(args []string) error {
+	region := args[0]
+	if err := validateRegion(region); err != nil {
+		return err
+	}
+
+	if err := remove(region); err != nil {
 		return err
 	}
 
