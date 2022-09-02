@@ -13,17 +13,17 @@ func ListVpcs() error {
 		return err
 	}
 
-	for _, region := range out.Regions {
-		vpc, err := entity.NewVpc(entity.NewClient(*region.RegionName))
+	for _, r := range out.Regions {
+		vpc, err := entity.NewVpc(entity.NewClient(*r.RegionName))
 		if err != nil {
 			return err
 		}
 
 		switch vpc.Id {
 		case nil:
-			regionVpc[*region.RegionName] = "NaN"
+			regionVpc[*r.RegionName] = "NaN"
 		default:
-			regionVpc[*region.RegionName] = *vpc.Id
+			regionVpc[*r.RegionName] = *vpc.Id
 		}
 	}
 
