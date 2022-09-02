@@ -13,13 +13,13 @@ func newlsCmd() *lsCmd {
 	root := &lsCmd{
 		cmd: &cobra.Command{
 			Use:           "ls",
-			Short:         "List all AWS regions",
-			Long:          `This command lists all AWS regions`,
+			Short:         "List VPCs in all AWS regions",
+			Long:          `This command lists VPCs in all AWS regions`,
 			SilenceUsage:  true,
 			SilenceErrors: true,
 			Args:          cobra.NoArgs,
 			RunE: func(cmd *cobra.Command, args []string) error {
-				return service.ListRegions()
+				return service.ListVpcs()
 			},
 		},
 	}

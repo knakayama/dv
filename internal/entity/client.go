@@ -36,8 +36,12 @@ func makeConfig(region string) aws.Config {
 	return cfg
 }
 
-func NewClient() *ec2.Client {
+func NewDefaultClient() *ec2.Client {
 	region := os.Getenv("DEFAULT_REGION")
 
+	return ec2.NewFromConfig(makeConfig(region))
+}
+
+func NewClient(region string) *ec2.Client {
 	return ec2.NewFromConfig(makeConfig(region))
 }

@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"fmt"
 	"log"
 
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
@@ -41,9 +42,7 @@ func DeleteVpc(client *ec2.Client, vpc types.Vpc) {
 }
 
 func RemoveVpc() error {
-	client := entity.NewClient()
-
-	vpc, err := entity.NewVpc(client)
+	vpc, err := entity.NewVpc(entity.NewDefaultClient())
 	if err != nil {
 		return err
 	}
@@ -70,6 +69,27 @@ func RemoveVpc() error {
 
 	if err := vpc.Remove(); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+func ListVpcs() error {
+	output, err := entity.NewRegion(entity.NewDefaultClient()).List()
+	if err != nil {
+		return err
+	}
+
+	for _, region := range output.Regions {
+		vpc, err := entity.NewVpc(entity.NewClient(*region.RegionName))
+		if err != nil {
+			return err
+		}
+		// TODO: To be pretty printed
+		//nolint:forbidigo
+		fmt.Println(*region.RegionName)
+		//nolint:forbidigo
+		fmt.Println(*vpc.Id)
 	}
 
 	return nil
