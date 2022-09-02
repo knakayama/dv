@@ -20,7 +20,13 @@ func (l *Lister) Run(_ []string) error {
 		if err != nil {
 			return err
 		}
-		regionVpc[*region.RegionName] = *vpc.Id
+
+		switch vpc.Id {
+		case nil:
+			regionVpc[*region.RegionName] = "NaN"
+		default:
+			regionVpc[*region.RegionName] = *vpc.Id
+		}
 	}
 
 	presenter.TableFrom(regionVpc)
