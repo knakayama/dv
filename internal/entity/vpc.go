@@ -40,6 +40,5 @@ func NewVpc(client *ec2.Client) (*Vpc, error) {
 		}
 	}
 
-	// TODO: return NotFoundError
 	return &Vpc{}, nil
 }

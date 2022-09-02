@@ -1,15 +1,24 @@
 package runner
 
-import "github.com/knakayama/dv/internal/entity"
+import (
+	"github.com/knakayama/dv/internal/entity"
+)
 
 type Remover struct{}
 
 func (r *Remover) Run(args []string) error {
 	region := args[0]
+	if err := validateRegion(region); err != nil {
+		return err
+	}
 
 	vpc, err := entity.NewVpc(entity.NewClient(region))
 	if err != nil {
 		return err
+	}
+
+	if vpc.Id == nil {
+		return errVpcNotFound
 	}
 
 	if err := vpc.NewIgw().Remove(); err != nil {
@@ -37,4 +46,19 @@ func (r *Remover) Run(args []string) error {
 	}
 
 	return nil
+}
+
+func validateRegion(regionLike string) error {
+	out, err := entity.NewRegion(entity.NewDefaultClient()).List()
+	if err != nil {
+		return err
+	}
+
+	for _, region := range out.Regions {
+		if regionLike == *region.RegionName {
+			return nil
+		}
+	}
+
+	return errUnknownRegion
 }
