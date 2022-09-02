@@ -6,21 +6,12 @@ import (
 	"github.com/knakayama/dv/internal/entity"
 )
 
-func remove(region string, yes bool) error {
+func remove(region string, vpc *entity.Vpc, yes bool) error {
 	if !yes {
 		// TODO: pretty print
 		//nolint:forbidigo
 		fmt.Printf("%s skipped...\n", region)
 		return nil
-	}
-
-	vpc, err := entity.NewVpc(entity.NewClient(region))
-	if err != nil {
-		return err
-	}
-
-	if vpc.Id == nil {
-		return errVpcNotFound
 	}
 
 	if err := vpc.NewIgw().Remove(); err != nil {
@@ -55,7 +46,16 @@ func RemoveVpc(region string, yes bool) error {
 		return err
 	}
 
-	if err := remove(region, yes); err != nil {
+	vpc, err := entity.NewVpc(entity.NewClient(region))
+	if err != nil {
+		return err
+	}
+
+	if vpc.Id == nil {
+		return errVpcNotFound
+	}
+
+	if err := remove(region, vpc, yes); err != nil {
 		return err
 	}
 

@@ -10,8 +10,12 @@ func RemoveVpcs(yes bool) error {
 		return err
 	}
 
-	for _, region := range out.Regions {
-		if err := remove(*region.RegionName, yes); err != nil {
+	for _, r := range out.Regions {
+		vpc, err := entity.NewVpc(entity.NewClient(*r.RegionName))
+		if err != nil {
+			return err
+		}
+		if err := remove(*r.RegionName, vpc, yes); err != nil {
 			return err
 		}
 	}
