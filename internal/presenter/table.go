@@ -13,16 +13,22 @@ func newTable() table.Writer {
 	return t
 }
 
-func TableFrom(m map[string]string) {
+func TableFrom(regionVpc map[string]string) {
 	t := newTable()
 	t.AppendHeader(table.Row{"Region", "Default VPC"})
 
-	for k, v := range m {
+	for region, vpc := range regionVpc {
 		t.AppendRows([]table.Row{
-			{k, v},
+			{region, vpc},
 		})
 		t.AppendSeparator()
 	}
+
+	t.SortBy([]table.SortBy{
+		{
+			Name: "Region",
+		},
+	})
 
 	t.Render()
 }
