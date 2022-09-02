@@ -3,15 +3,12 @@ package command
 import (
 	"log"
 
-	"github.com/knakayama/dv/internal/executor"
 	"github.com/spf13/cobra"
 )
 
 type rootCmd struct {
 	cmd *cobra.Command
 }
-
-type runEFuncType func(cmd *cobra.Command, args []string) error
 
 func Execute(args []string) {
 	newRootCmd().Execute(args)
@@ -46,10 +43,4 @@ Aside from that, you can remove a VPC in each region.
 	)
 
 	return root
-}
-
-func runE(e executor.Executor) runEFuncType {
-	return func(cmd *cobra.Command, args []string) error {
-		return e.Run(args)
-	}
 }

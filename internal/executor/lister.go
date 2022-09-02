@@ -5,9 +5,7 @@ import (
 	"github.com/knakayama/dv/internal/presenter"
 )
 
-type Lister struct{}
-
-func (l *Lister) Run(_ []string) error {
+func ListVpcs() error {
 	regionVpc := make(map[string]string)
 
 	out, err := entity.NewRegion(entity.NewDefaultClient()).List()

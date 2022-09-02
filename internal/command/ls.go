@@ -18,7 +18,9 @@ func newlsCmd() *lsCmd {
 			SilenceUsage:  true,
 			SilenceErrors: true,
 			Args:          cobra.NoArgs,
-			RunE:          runE(&executor.Lister{}),
+			RunE: func(cmd *cobra.Command, args []string) error {
+				return executor.ListVpcs()
+			},
 		},
 	}
 

@@ -4,8 +4,6 @@ import (
 	"github.com/knakayama/dv/internal/entity"
 )
 
-type Remover struct{}
-
 func remove(region string) error {
 	vpc, err := entity.NewVpc(entity.NewClient(region))
 	if err != nil {
@@ -43,8 +41,7 @@ func remove(region string) error {
 	return nil
 }
 
-func (r *Remover) Run(args []string) error {
-	region := args[0]
+func RemoveVpc(region string) error {
 	if err := validateRegion(region); err != nil {
 		return err
 	}

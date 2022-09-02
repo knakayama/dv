@@ -18,7 +18,9 @@ func newRmCmd() *rmCmd {
 			SilenceUsage:  true,
 			SilenceErrors: true,
 			Args:          cobra.ExactArgs(1),
-			RunE:          runE(&executor.Remover{}),
+			RunE: func(cmd *cobra.Command, args []string) error {
+				return executor.RemoveVpc(args[0])
+			},
 		},
 	}
 
