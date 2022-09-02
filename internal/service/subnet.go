@@ -11,7 +11,7 @@ import (
 )
 
 func DeleteSubnets(client *ec2.Client, vpc types.Vpc) {
-	output, err := client.DescribeSubnets(
+	out, err := client.DescribeSubnets(
 		context.TODO(),
 		&ec2.DescribeSubnetsInput{
 			Filters: []types.Filter{
@@ -26,7 +26,7 @@ func DeleteSubnets(client *ec2.Client, vpc types.Vpc) {
 		log.Fatalf("Failed to list subnets, %v", err)
 	}
 
-	for _, subnet := range output.Subnets {
+	for _, subnet := range out.Subnets {
 		//nolint:forbidigo
 		fmt.Println(*subnet.SubnetId)
 		_, err := client.DeleteSubnet(

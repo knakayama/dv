@@ -12,7 +12,7 @@ import (
 )
 
 func listRegions(client *ec2.Client) []types.Region {
-	output, err := client.DescribeRegions(
+	out, err := client.DescribeRegions(
 		context.TODO(),
 		&ec2.DescribeRegionsInput{},
 	)
@@ -20,7 +20,7 @@ func listRegions(client *ec2.Client) []types.Region {
 		log.Fatalf("Failed to list regions, %v", err)
 	}
 
-	return output.Regions
+	return out.Regions
 }
 
 func makeConfig(region string) aws.Config {

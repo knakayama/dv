@@ -13,14 +13,14 @@ import (
 func ListDefaultVpcs(client *ec2.Client) []types.Vpc {
 	var vpcs []types.Vpc
 
-	output, err := client.DescribeVpcs(
+	out, err := client.DescribeVpcs(
 		context.TODO(),
 		&ec2.DescribeVpcsInput{})
 	if err != nil {
 		log.Fatalf("Failed to list default vpcs, %v", err)
 	}
 
-	for _, vpc := range output.Vpcs {
+	for _, vpc := range out.Vpcs {
 		if *vpc.IsDefault {
 			vpcs = append(vpcs, vpc)
 		}
@@ -41,8 +41,8 @@ func DeleteVpc(client *ec2.Client, vpc types.Vpc) {
 	}
 }
 
-func RemoveVpc() error {
-	vpc, err := entity.NewVpc(entity.NewDefaultClient())
+func RemoveVpc(region string) error {
+	vpc, err := entity.NewVpc(entity.NewClient(region))
 	if err != nil {
 		return err
 	}
@@ -77,12 +77,12 @@ func RemoveVpc() error {
 func ListVpcs() error {
 	regionVpc := make(map[string]string)
 
-	output, err := entity.NewRegion(entity.NewDefaultClient()).List()
+	out, err := entity.NewRegion(entity.NewDefaultClient()).List()
 	if err != nil {
 		return err
 	}
 
-	for _, region := range output.Regions {
+	for _, region := range out.Regions {
 		vpc, err := entity.NewVpc(entity.NewClient(*region.RegionName))
 		if err != nil {
 			return err
@@ -90,7 +90,7 @@ func ListVpcs() error {
 		regionVpc[*region.RegionName] = *vpc.Id
 	}
 
-	presenter.PrintTableIn(regionVpc)
+	presenter.ToTable(regionVpc)
 
 	return nil
 }

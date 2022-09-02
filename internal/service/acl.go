@@ -11,7 +11,7 @@ import (
 )
 
 func DeleteAcls(client *ec2.Client, vpc types.Vpc) {
-	output, err := client.DescribeNetworkAcls(
+	out, err := client.DescribeNetworkAcls(
 		context.TODO(),
 		&ec2.DescribeNetworkAclsInput{
 			Filters: []types.Filter{
@@ -26,7 +26,7 @@ func DeleteAcls(client *ec2.Client, vpc types.Vpc) {
 		log.Fatalf("Failed to list network acls, %v", err)
 	}
 
-	for _, acl := range output.NetworkAcls {
+	for _, acl := range out.NetworkAcls {
 		//nolint:forbidigo
 		fmt.Println(*acl.NetworkAclId)
 		_, err := client.DeleteNetworkAcl(

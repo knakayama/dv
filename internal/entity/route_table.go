@@ -13,16 +13,16 @@ type RouteTable struct {
 	vpc *Vpc
 }
 
-func (rtb *RouteTable) ids() ([]*string, error) {
+func (r *RouteTable) ids() ([]*string, error) {
 	var routeTableIds []*string
 
-	output, err := rtb.vpc.Client.DescribeRouteTables(
+	out, err := r.vpc.Client.DescribeRouteTables(
 		context.TODO(),
 		&ec2.DescribeRouteTablesInput{
 			Filters: []types.Filter{
 				{
 					Name:   aws.String("vpc-id"),
-					Values: []string{*rtb.vpc.Id},
+					Values: []string{*r.vpc.Id},
 				},
 			},
 		},
@@ -31,20 +31,20 @@ func (rtb *RouteTable) ids() ([]*string, error) {
 		return []*string{}, err
 	}
 
-	for _, routeTable := range output.RouteTables {
+	for _, routeTable := range out.RouteTables {
 		routeTableIds = append(routeTableIds, routeTable.RouteTableId)
 	}
 
 	return routeTableIds, nil
 }
 
-func (rtb *RouteTable) Remove() error {
-	routeTableIds, _ := rtb.ids()
+func (r *RouteTable) Remove() error {
+	routeTableIds, _ := r.ids()
 
 	for _, routeTableId := range routeTableIds {
 		//nolint:forbidigo
 		fmt.Println(*routeTableId)
-		_, err := rtb.vpc.Client.DeleteRouteTable(
+		_, err := r.vpc.Client.DeleteRouteTable(
 			context.TODO(),
 			&ec2.DeleteRouteTableInput{
 				RouteTableId: routeTableId,
@@ -57,8 +57,8 @@ func (rtb *RouteTable) Remove() error {
 	return nil
 }
 
-func (vpc *Vpc) NewRouteTable() *RouteTable {
+func (v *Vpc) NewRouteTable() *RouteTable {
 	return &RouteTable{
-		vpc: vpc,
+		vpc: v,
 	}
 }

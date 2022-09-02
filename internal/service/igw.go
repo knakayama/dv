@@ -11,7 +11,7 @@ import (
 )
 
 func DeleteIgws(client *ec2.Client, vpc types.Vpc) {
-	output, err := client.DescribeInternetGateways(
+	out, err := client.DescribeInternetGateways(
 		context.TODO(),
 		&ec2.DescribeInternetGatewaysInput{
 			Filters: []types.Filter{
@@ -26,7 +26,7 @@ func DeleteIgws(client *ec2.Client, vpc types.Vpc) {
 		log.Fatalf("Failed to list igws, %v", err)
 	}
 
-	for _, igw := range output.InternetGateways {
+	for _, igw := range out.InternetGateways {
 		//nolint:forbidigo
 		fmt.Println(*igw.InternetGatewayId)
 		_, err := client.DeleteInternetGateway(

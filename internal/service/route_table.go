@@ -11,7 +11,7 @@ import (
 )
 
 func DeleteRouteTables(client *ec2.Client, vpc types.Vpc) {
-	output, err := client.DescribeRouteTables(
+	out, err := client.DescribeRouteTables(
 		context.TODO(),
 		&ec2.DescribeRouteTablesInput{
 			Filters: []types.Filter{
@@ -26,7 +26,7 @@ func DeleteRouteTables(client *ec2.Client, vpc types.Vpc) {
 		log.Fatalf("Failed to list route tables, %v", err)
 	}
 
-	for _, routeTable := range output.RouteTables {
+	for _, routeTable := range out.RouteTables {
 		//nolint:forbidigo
 		fmt.Println(*routeTable.RouteTableId)
 		_, err := client.DeleteRouteTable(

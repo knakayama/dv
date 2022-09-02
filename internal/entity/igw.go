@@ -13,16 +13,16 @@ type Igw struct {
 	vpc *Vpc
 }
 
-func (igw *Igw) ids() ([]*string, error) {
+func (i *Igw) ids() ([]*string, error) {
 	var igwIds []*string
 
-	output, err := igw.vpc.Client.DescribeInternetGateways(
+	out, err := i.vpc.Client.DescribeInternetGateways(
 		context.TODO(),
 		&ec2.DescribeInternetGatewaysInput{
 			Filters: []types.Filter{
 				{
 					Name:   aws.String("attachment.vpc-id"),
-					Values: []string{*igw.vpc.Id},
+					Values: []string{*i.vpc.Id},
 				},
 			},
 		},
@@ -31,20 +31,20 @@ func (igw *Igw) ids() ([]*string, error) {
 		return []*string{}, err
 	}
 
-	for _, igw := range output.InternetGateways {
+	for _, igw := range out.InternetGateways {
 		igwIds = append(igwIds, igw.InternetGatewayId)
 	}
 
 	return igwIds, nil
 }
 
-func (igw *Igw) Remove() error {
-	igwIds, _ := igw.ids()
+func (i *Igw) Remove() error {
+	igwIds, _ := i.ids()
 
 	for _, igwId := range igwIds {
 		//nolint:forbidigo
 		fmt.Println(*igwId)
-		_, err := igw.vpc.Client.DeleteInternetGateway(
+		_, err := i.vpc.Client.DeleteInternetGateway(
 			context.TODO(),
 			&ec2.DeleteInternetGatewayInput{
 				InternetGatewayId: igwId,
@@ -57,8 +57,8 @@ func (igw *Igw) Remove() error {
 	return nil
 }
 
-func (vpc *Vpc) NewIgw() *Igw {
+func (v *Vpc) NewIgw() *Igw {
 	return &Igw{
-		vpc: vpc,
+		vpc: v,
 	}
 }

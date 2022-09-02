@@ -12,14 +12,14 @@ type rmCmd struct {
 func newRmCmd() *rmCmd {
 	root := &rmCmd{
 		cmd: &cobra.Command{
-			Use:           "rm",
+			Use:           "rm [region]",
 			Short:         "Remove a default VPC in an AWS region",
 			Long:          `This command removes a default VPC in an AWS region`,
 			SilenceUsage:  true,
 			SilenceErrors: true,
-			Args:          cobra.NoArgs,
+			Args:          cobra.ExactArgs(1),
 			RunE: func(cmd *cobra.Command, args []string) error {
-				return service.RemoveVpc()
+				return service.RemoveVpc(args[0])
 			},
 		},
 	}

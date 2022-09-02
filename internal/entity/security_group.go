@@ -13,16 +13,16 @@ type SecurityGroup struct {
 	vpc *Vpc
 }
 
-func (sg *SecurityGroup) ids() ([]*string, error) {
+func (s *SecurityGroup) ids() ([]*string, error) {
 	var sgIds []*string
 
-	output, err := sg.vpc.Client.DescribeSecurityGroups(
+	out, err := s.vpc.Client.DescribeSecurityGroups(
 		context.TODO(),
 		&ec2.DescribeSecurityGroupsInput{
 			Filters: []types.Filter{
 				{
 					Name:   aws.String("vpc-id"),
-					Values: []string{*sg.vpc.Id},
+					Values: []string{*s.vpc.Id},
 				},
 			},
 		},
@@ -31,20 +31,20 @@ func (sg *SecurityGroup) ids() ([]*string, error) {
 		return []*string{}, err
 	}
 
-	for _, sg := range output.SecurityGroups {
+	for _, sg := range out.SecurityGroups {
 		sgIds = append(sgIds, sg.GroupId)
 	}
 
 	return sgIds, nil
 }
 
-func (sg *SecurityGroup) Remove() error {
-	sgIds, _ := sg.ids()
+func (s *SecurityGroup) Remove() error {
+	sgIds, _ := s.ids()
 
 	for _, sgId := range sgIds {
 		//nolint:forbidigo
 		fmt.Println(*sgId)
-		_, err := sg.vpc.Client.DeleteSecurityGroup(
+		_, err := s.vpc.Client.DeleteSecurityGroup(
 			context.TODO(),
 			&ec2.DeleteSecurityGroupInput{
 				GroupId: sgId,
@@ -57,8 +57,8 @@ func (sg *SecurityGroup) Remove() error {
 	return nil
 }
 
-func (vpc *Vpc) NewSecurityGroup() *SecurityGroup {
+func (v *Vpc) NewSecurityGroup() *SecurityGroup {
 	return &SecurityGroup{
-		vpc: vpc,
+		vpc: v,
 	}
 }

@@ -13,11 +13,11 @@ type Vpc struct {
 	Client *ec2.Client
 }
 
-func (vpc *Vpc) Remove() error {
-	_, err := vpc.Client.DeleteVpc(
+func (v *Vpc) Remove() error {
+	_, err := v.Client.DeleteVpc(
 		context.TODO(),
 		&ec2.DeleteVpcInput{
-			VpcId: vpc.Id,
+			VpcId: v.Id,
 		},
 	)
 	if err != nil {
@@ -27,14 +27,14 @@ func (vpc *Vpc) Remove() error {
 }
 
 func NewVpc(client *ec2.Client) (*Vpc, error) {
-	output, err := client.DescribeVpcs(
+	out, err := client.DescribeVpcs(
 		context.TODO(),
 		&ec2.DescribeVpcsInput{})
 	if err != nil {
 		return &Vpc{}, err
 	}
 
-	for _, vpc := range output.Vpcs {
+	for _, vpc := range out.Vpcs {
 		if *vpc.IsDefault {
 			return &Vpc{Id: vpc.VpcId, Client: client}, nil
 		}

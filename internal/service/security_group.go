@@ -10,7 +10,7 @@ import (
 )
 
 func DeleteSecurityGroups(client *ec2.Client, vpc types.Vpc) {
-	output, err := client.DescribeSecurityGroups(
+	out, err := client.DescribeSecurityGroups(
 		context.TODO(),
 		&ec2.DescribeSecurityGroupsInput{
 			Filters: []types.Filter{
@@ -25,7 +25,7 @@ func DeleteSecurityGroups(client *ec2.Client, vpc types.Vpc) {
 		log.Fatalf("Failed to list security groups, %v", err)
 	}
 
-	for _, securityGroup := range output.SecurityGroups {
+	for _, securityGroup := range out.SecurityGroups {
 		_, err := client.DeleteSecurityGroup(
 			context.TODO(),
 			&ec2.DeleteSecurityGroupInput{

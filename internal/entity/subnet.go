@@ -13,16 +13,16 @@ type Subnet struct {
 	vpc *Vpc
 }
 
-func (subnet *Subnet) ids() ([]*string, error) {
+func (s *Subnet) ids() ([]*string, error) {
 	var subnetIds []*string
 
-	output, err := subnet.vpc.Client.DescribeSubnets(
+	out, err := s.vpc.Client.DescribeSubnets(
 		context.TODO(),
 		&ec2.DescribeSubnetsInput{
 			Filters: []types.Filter{
 				{
 					Name:   aws.String("vpc-id"),
-					Values: []string{*subnet.vpc.Id},
+					Values: []string{*s.vpc.Id},
 				},
 			},
 		},
@@ -31,20 +31,20 @@ func (subnet *Subnet) ids() ([]*string, error) {
 		return []*string{}, err
 	}
 
-	for _, subnet := range output.Subnets {
+	for _, subnet := range out.Subnets {
 		subnetIds = append(subnetIds, subnet.SubnetId)
 	}
 
 	return subnetIds, nil
 }
 
-func (subnet *Subnet) Remove() error {
-	subnetIds, _ := subnet.ids()
+func (s *Subnet) Remove() error {
+	subnetIds, _ := s.ids()
 
 	for _, subnetId := range subnetIds {
 		//nolint:forbidigo
 		fmt.Println(*subnetId)
-		_, err := subnet.vpc.Client.DeleteSubnet(
+		_, err := s.vpc.Client.DeleteSubnet(
 			context.TODO(),
 			&ec2.DeleteSubnetInput{
 				SubnetId: subnetId,
@@ -57,8 +57,8 @@ func (subnet *Subnet) Remove() error {
 	return nil
 }
 
-func (vpc *Vpc) NewSubnet() *Subnet {
+func (v *Vpc) NewSubnet() *Subnet {
 	return &Subnet{
-		vpc: vpc,
+		vpc: v,
 	}
 }
