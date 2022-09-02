@@ -13,7 +13,7 @@ func newTable() table.Writer {
 	return t
 }
 
-func ToTable(keyValue map[string]string) {
+func TableFrom(keyValue map[string]string) {
 	t := newTable()
 	t.AppendHeader(table.Row{"Region", "Default VPC"})
 

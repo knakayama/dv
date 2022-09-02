@@ -1,7 +1,7 @@
 package command
 
 import (
-	"github.com/knakayama/dv/internal/service"
+	"github.com/knakayama/dv/internal/runner"
 	"github.com/spf13/cobra"
 )
 
@@ -18,9 +18,7 @@ func newlsCmd() *lsCmd {
 			SilenceUsage:  true,
 			SilenceErrors: true,
 			Args:          cobra.NoArgs,
-			RunE: func(cmd *cobra.Command, args []string) error {
-				return service.ListVpcs()
-			},
+			RunE:          runE(&runner.Lister{}),
 		},
 	}
 
