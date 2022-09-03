@@ -16,10 +16,6 @@ type Acl struct {
 func (acl *Acl) ids() ([]*string, error) {
 	var aclIds []*string
 
-	if acl.vpc.Id == nil {
-		return aclIds, ErrVpcNotFound
-	}
-
 	out, err := acl.vpc.Client.DescribeNetworkAcls(
 		context.TODO(),
 		&ec2.DescribeNetworkAclsInput{
@@ -43,10 +39,6 @@ func (acl *Acl) ids() ([]*string, error) {
 }
 
 func (acl *Acl) Remove() error {
-	if acl.vpc.Id == nil {
-		return ErrVpcNotFound
-	}
-
 	aclIds, _ := acl.ids()
 
 	for _, aclId := range aclIds {
