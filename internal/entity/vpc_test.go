@@ -16,7 +16,7 @@ func setupTest(_ *testing.T) func(_ *testing.T) {
 	}
 }
 
-func TestNewClientError(t *testing.T) {
+func TestNewInvalidClient(t *testing.T) {
 	vpc, err := NewVpc(&ec2.Client{})
 
 	assert.NotNil(t, vpc)
@@ -44,7 +44,7 @@ func TestNewVpcNoDefaultVpc(t *testing.T) {
 	assert.Nil(t, err)
 }
 
-func TestNewVpcDefaultVpcFound(t *testing.T) {
+func TestNewVpcDefaultVpcExists(t *testing.T) {
 	teardownTest := setupTest(t)
 	defer teardownTest(t)
 	test.MakeDefaultVpc()
