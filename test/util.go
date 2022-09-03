@@ -7,6 +7,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
+	"github.com/aws/aws-sdk-go-v2/service/ec2/types"
 )
 
 var client *ec2.Client
@@ -54,7 +55,7 @@ func RemoveVpcs() {
 	}
 }
 
-func MakeVpcs() {
+func CreateVpcs() {
 	for i := 0; i < 5; i++ {
 		_, err := client.CreateVpc(
 			context.TODO(),
@@ -68,7 +69,7 @@ func MakeVpcs() {
 	}
 }
 
-func MakeDefaultVpc() {
+func CreateDefaultVpc() {
 	_, err := client.CreateDefaultVpc(
 		context.TODO(),
 		&ec2.CreateDefaultVpcInput{},
@@ -76,4 +77,37 @@ func MakeDefaultVpc() {
 	if err != nil {
 		panic(err)
 	}
+}
+
+func CreateAcls(vpcId *string) {
+	for i := 0; i < 5; i++ {
+		_, err := client.CreateNetworkAcl(
+			context.TODO(),
+			&ec2.CreateNetworkAclInput{
+				VpcId: vpcId,
+			},
+		)
+		if err != nil {
+			panic(err)
+		}
+	}
+}
+
+func ListAcls(vpcId *string) []types.NetworkAcl {
+	out, err := client.DescribeNetworkAcls(
+		context.TODO(),
+		&ec2.DescribeNetworkAclsInput{
+			Filters: []types.Filter{
+				{
+					Name:   aws.String("vpc-id"),
+					Values: []string{*vpcId},
+				},
+			},
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+
+	return out.NetworkAcls
 }

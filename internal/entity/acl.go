@@ -13,16 +13,16 @@ type Acl struct {
 	vpc *Vpc
 }
 
-func (a *Acl) ids() ([]*string, error) {
+func (acl *Acl) ids() ([]*string, error) {
 	var aclIds []*string
 
-	out, err := a.vpc.Client.DescribeNetworkAcls(
+	out, err := acl.vpc.Client.DescribeNetworkAcls(
 		context.TODO(),
 		&ec2.DescribeNetworkAclsInput{
 			Filters: []types.Filter{
 				{
 					Name:   aws.String("vpc-id"),
-					Values: []string{*a.vpc.Id},
+					Values: []string{*acl.vpc.Id},
 				},
 			},
 		},
@@ -38,13 +38,17 @@ func (a *Acl) ids() ([]*string, error) {
 	return aclIds, nil
 }
 
-func (a *Acl) Remove() error {
-	aclIds, _ := a.ids()
+func (acl *Acl) Remove() error {
+	if acl.vpc.Id == nil {
+		return ErrVpcNotFound
+	}
+
+	aclIds, _ := acl.ids()
 
 	for _, aclId := range aclIds {
 		//nolint:forbidigo
 		fmt.Println(*aclId)
-		_, err := a.vpc.Client.DeleteNetworkAcl(
+		_, err := acl.vpc.Client.DeleteNetworkAcl(
 			context.TODO(),
 			&ec2.DeleteNetworkAclInput{
 				NetworkAclId: aclId,

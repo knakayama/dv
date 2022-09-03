@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func setupTest(_ *testing.T) func(_ *testing.T) {
+func setupVpcTest(_ *testing.T) func(_ *testing.T) {
 	test.RemoveVpcs()
 
 	return func(_ *testing.T) {
@@ -16,15 +16,15 @@ func setupTest(_ *testing.T) func(_ *testing.T) {
 	}
 }
 
-func TestNewInvalidClient(t *testing.T) {
+func TestVpcNewInvalidClient(t *testing.T) {
 	vpc, err := NewVpc(&ec2.Client{})
 
 	assert.NotNil(t, vpc)
 	assert.NotNil(t, err)
 }
 
-func TestNewVpcNoVpc(t *testing.T) {
-	teardownTest := setupTest(t)
+func TestVpcNewVpcNoVpc(t *testing.T) {
+	teardownTest := setupVpcTest(t)
 	defer teardownTest(t)
 
 	vpc, err := NewVpc(NewDefaultClient())
@@ -33,10 +33,10 @@ func TestNewVpcNoVpc(t *testing.T) {
 	assert.Nil(t, err)
 }
 
-func TestNewVpcNoDefaultVpc(t *testing.T) {
-	teardownTest := setupTest(t)
+func TestVpcNewVpcNoDefaultVpc(t *testing.T) {
+	teardownTest := setupVpcTest(t)
 	defer teardownTest(t)
-	test.MakeVpcs()
+	test.CreateVpcs()
 
 	vpc, err := NewVpc(NewDefaultClient())
 
@@ -44,10 +44,10 @@ func TestNewVpcNoDefaultVpc(t *testing.T) {
 	assert.Nil(t, err)
 }
 
-func TestNewVpcDefaultVpcExists(t *testing.T) {
-	teardownTest := setupTest(t)
+func TestVpcNewVpcDefaultVpcExists(t *testing.T) {
+	teardownTest := setupVpcTest(t)
 	defer teardownTest(t)
-	test.MakeDefaultVpc()
+	test.CreateDefaultVpc()
 
 	vpc, err := NewVpc(NewDefaultClient())
 
@@ -55,8 +55,8 @@ func TestNewVpcDefaultVpcExists(t *testing.T) {
 	assert.Nil(t, err)
 }
 
-func TestRemoveNoVpc(t *testing.T) {
-	teardownTest := setupTest(t)
+func TestVpcRemoveNoVpc(t *testing.T) {
+	teardownTest := setupVpcTest(t)
 	defer teardownTest(t)
 
 	vpc, _ := NewVpc(NewDefaultClient())
@@ -65,8 +65,8 @@ func TestRemoveNoVpc(t *testing.T) {
 	assert.ErrorIs(t, err, ErrVpcNotFound)
 }
 
-func TestRemoveInvalidClient(t *testing.T) {
-	teardownTest := setupTest(t)
+func TestVpcRemoveInvalidClient(t *testing.T) {
+	teardownTest := setupVpcTest(t)
 	defer teardownTest(t)
 
 	vpc, _ := NewVpc(NewDefaultClient())
@@ -76,9 +76,9 @@ func TestRemoveInvalidClient(t *testing.T) {
 	assert.NotNil(t, err)
 }
 
-func TestRemoveVpcExists(t *testing.T) {
-	teardownTest := setupTest(t)
-	test.MakeDefaultVpc()
+func TestVpcRemoveVpcExists(t *testing.T) {
+	teardownTest := setupVpcTest(t)
+	test.CreateDefaultVpc()
 	defer teardownTest(t)
 
 	vpc, _ := NewVpc(NewDefaultClient())
