@@ -40,3 +40,7 @@ tasks:
   tool:install:
     cmds:
       - ./scripts/install.sh
+
+  test:
+    cmds:
+      - go test -v ./...
