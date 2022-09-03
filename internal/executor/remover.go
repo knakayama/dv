@@ -6,7 +6,7 @@ import (
 	"github.com/knakayama/dv/internal/entity"
 )
 
-func remove(region string, vpc *entity.Vpc, yes bool) error {
+func removeNetworkComponents(region string, vpc *entity.Vpc, yes bool) error {
 	if !yes {
 		// TODO: pretty print
 		//nolint:forbidigo
@@ -55,7 +55,7 @@ func RemoveVpc(region string, yes bool) error {
 		return entity.ErrVpcNotFound
 	}
 
-	if err := remove(region, vpc, yes); err != nil {
+	if err := removeNetworkComponents(region, vpc, yes); err != nil {
 		return err
 	}
 
