@@ -7,6 +7,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/config v1.17.1
 	github.com/aws/aws-sdk-go-v2/service/ec2 v1.54.0
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.27.6
+	github.com/jaswdr/faker v1.15.0
 	github.com/jedib0t/go-pretty/v6 v6.3.7
 	github.com/stretchr/testify v1.7.4
 )
