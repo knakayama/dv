@@ -52,7 +52,7 @@ func RemoveVpc(region string, yes bool) error {
 	}
 
 	if vpc.Id == nil {
-		return errVpcNotFound
+		return entity.ErrVpcNotFound
 	}
 
 	if err := remove(region, vpc, yes); err != nil {
@@ -74,5 +74,5 @@ func validateRegion(regionLike string) error {
 		}
 	}
 
-	return errUnknownRegion
+	return entity.ErrUnknownRegion
 }

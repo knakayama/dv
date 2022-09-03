@@ -54,3 +54,35 @@ func TestNewVpcDefaultVpcFound(t *testing.T) {
 	assert.NotNil(t, vpc.Id)
 	assert.Nil(t, err)
 }
+
+func TestRemoveNoVpc(t *testing.T) {
+	teardownTest := setupTest(t)
+	defer teardownTest(t)
+
+	vpc, _ := NewVpc(NewDefaultClient())
+	err := vpc.Remove()
+
+	assert.ErrorIs(t, err, ErrVpcNotFound)
+}
+
+func TestRemoveInvalidClient(t *testing.T) {
+	teardownTest := setupTest(t)
+	defer teardownTest(t)
+
+	vpc, _ := NewVpc(NewDefaultClient())
+	vpc.Client = &ec2.Client{}
+	err := vpc.Remove()
+
+	assert.NotNil(t, err)
+}
+
+func TestRemoveVpcExists(t *testing.T) {
+	teardownTest := setupTest(t)
+	test.MakeDefaultVpc()
+	defer teardownTest(t)
+
+	vpc, _ := NewVpc(NewDefaultClient())
+	err := vpc.Remove()
+
+	assert.Nil(t, err)
+}

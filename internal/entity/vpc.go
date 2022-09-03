@@ -14,6 +14,10 @@ type Vpc struct {
 }
 
 func (v *Vpc) Remove() error {
+	if v.Id == nil {
+		return ErrVpcNotFound
+	}
+
 	_, err := v.Client.DeleteVpc(
 		context.TODO(),
 		&ec2.DeleteVpcInput{
