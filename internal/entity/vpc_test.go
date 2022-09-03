@@ -1,18 +1,28 @@
 package entity
 
 import (
+	"context"
 	"testing"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
-	"github.com/knakayama/dv/test"
 	"github.com/stretchr/testify/assert"
 )
 
-func setupVpcTest(_ *testing.T) func(_ *testing.T) {
-	test.RemoveVpcs()
+func setup(_ *testing.T, client *ec2.Client) func(_ *testing.T) {
+	removeVpcs(client)
 
 	return func(_ *testing.T) {
-		test.RemoveVpcs()
+		removeVpcs(client)
+	}
+}
+
+func setupVpc(_ *testing.T, client *ec2.Client) func(_ *testing.T) {
+	removeVpcs(client)
+	createDefaultVpc(client)
+
+	return func(_ *testing.T) {
+		removeVpcs(client)
 	}
 }
 
@@ -24,52 +34,57 @@ func TestVpcNewInvalidClient(t *testing.T) {
 }
 
 func TestVpcNewVpcNoVpc(t *testing.T) {
-	teardownTest := setupVpcTest(t)
-	defer teardownTest(t)
+	client := NewDefaultClient()
+	teardown := setup(t, client)
+	defer teardown(t)
 
-	vpc, err := NewVpc(NewDefaultClient())
+	vpc, err := NewVpc(client)
 
 	assert.Nil(t, vpc.Id)
 	assert.Nil(t, err)
 }
 
 func TestVpcNewVpcNoDefaultVpc(t *testing.T) {
-	teardownTest := setupVpcTest(t)
-	defer teardownTest(t)
-	test.CreateVpcs()
+	client := NewDefaultClient()
+	teardown := setup(t, client)
+	defer teardown(t)
+	createVpcs(client)
 
-	vpc, err := NewVpc(NewDefaultClient())
+	vpc, err := NewVpc(client)
 
 	assert.Nil(t, vpc.Id)
 	assert.Nil(t, err)
 }
 
 func TestVpcNewVpcDefaultVpcExists(t *testing.T) {
-	teardownTest := setupVpcTest(t)
-	defer teardownTest(t)
-	test.CreateDefaultVpc()
+	client := NewDefaultClient()
+	teardown := setup(t, client)
+	defer teardown(t)
+	createDefaultVpc(client)
 
-	vpc, err := NewVpc(NewDefaultClient())
+	vpc, err := NewVpc(client)
 
 	assert.NotNil(t, vpc.Id)
 	assert.Nil(t, err)
 }
 
 func TestVpcRemoveNoVpc(t *testing.T) {
-	teardownTest := setupVpcTest(t)
-	defer teardownTest(t)
+	client := NewDefaultClient()
+	teardown := setup(t, client)
+	defer teardown(t)
 
-	vpc, _ := NewVpc(NewDefaultClient())
+	vpc, _ := NewVpc(client)
 	err := vpc.Remove()
 
 	assert.ErrorIs(t, err, ErrVpcNotFound)
 }
 
 func TestVpcRemoveInvalidClient(t *testing.T) {
-	teardownTest := setupVpcTest(t)
-	defer teardownTest(t)
+	client := NewDefaultClient()
+	teardown := setup(t, client)
+	defer teardown(t)
 
-	vpc, _ := NewVpc(NewDefaultClient())
+	vpc, _ := NewVpc(client)
 	vpc.Client = &ec2.Client{}
 	err := vpc.Remove()
 
@@ -77,12 +92,59 @@ func TestVpcRemoveInvalidClient(t *testing.T) {
 }
 
 func TestVpcRemoveVpcExists(t *testing.T) {
-	teardownTest := setupVpcTest(t)
-	test.CreateDefaultVpc()
-	defer teardownTest(t)
+	client := NewDefaultClient()
+	teardown := setup(t, client)
+	createDefaultVpc(client)
+	defer teardown(t)
 
-	vpc, _ := NewVpc(NewDefaultClient())
+	vpc, _ := NewVpc(client)
 	err := vpc.Remove()
 
 	assert.Nil(t, err)
+}
+
+func removeVpcs(client *ec2.Client) {
+	out, err := client.DescribeVpcs(
+		context.TODO(),
+		&ec2.DescribeVpcsInput{},
+	)
+	if err != nil {
+		panic(err)
+	}
+
+	for _, vpc := range out.Vpcs {
+		_, err := client.DeleteVpc(
+			context.TODO(),
+			&ec2.DeleteVpcInput{
+				VpcId: vpc.VpcId,
+			},
+		)
+		if err != nil {
+			panic(err)
+		}
+	}
+}
+
+func createVpcs(client *ec2.Client) {
+	for i := 0; i < 5; i++ {
+		_, err := client.CreateVpc(
+			context.TODO(),
+			&ec2.CreateVpcInput{
+				CidrBlock: aws.String("192.168.0.0/16"),
+			},
+		)
+		if err != nil {
+			panic(err)
+		}
+	}
+}
+
+func createDefaultVpc(client *ec2.Client) {
+	_, err := client.CreateDefaultVpc(
+		context.TODO(),
+		&ec2.CreateDefaultVpcInput{},
+	)
+	if err != nil {
+		panic(err)
+	}
 }

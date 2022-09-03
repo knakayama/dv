@@ -16,6 +16,10 @@ type Acl struct {
 func (acl *Acl) ids() ([]*string, error) {
 	var aclIds []*string
 
+	if acl.vpc.Id == nil {
+		return aclIds, ErrVpcNotFound
+	}
+
 	out, err := acl.vpc.Client.DescribeNetworkAcls(
 		context.TODO(),
 		&ec2.DescribeNetworkAclsInput{

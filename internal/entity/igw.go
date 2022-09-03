@@ -16,6 +16,10 @@ type Igw struct {
 func (i *Igw) ids() ([]*string, error) {
 	var igwIds []*string
 
+	if i.vpc.Id == nil {
+		return igwIds, ErrVpcNotFound
+	}
+
 	out, err := i.vpc.Client.DescribeInternetGateways(
 		context.TODO(),
 		&ec2.DescribeInternetGatewaysInput{
@@ -39,6 +43,10 @@ func (i *Igw) ids() ([]*string, error) {
 }
 
 func (i *Igw) Remove() error {
+	if i.vpc.Id == nil {
+		return ErrVpcNotFound
+	}
+
 	igwIds, _ := i.ids()
 
 	for _, igwId := range igwIds {

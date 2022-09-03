@@ -1,26 +1,33 @@
 package entity
 
 import (
+	"context"
 	"testing"
 
-	"github.com/knakayama/dv/test"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/service/ec2"
+	"github.com/aws/aws-sdk-go-v2/service/ec2/types"
 	"github.com/stretchr/testify/assert"
 )
 
-func setupAclTest(_ *testing.T) func(_ *testing.T) {
-	test.RemoveVpcs()
-	test.CreateDefaultVpc()
+func TestAclIdsNoVpc(t *testing.T) {
+	client := NewDefaultClient()
+	teardown := setup(t, client)
+	defer teardown(t)
 
-	return func(_ *testing.T) {
-		test.RemoveVpcs()
-	}
+	vpc, _ := NewVpc(client)
+	aclIds, err := vpc.NewAcl().ids()
+
+	assert.Empty(t, aclIds)
+	assert.ErrorIs(t, err, ErrVpcNotFound)
 }
 
 func TestAclRemoveNoVpc(t *testing.T) {
-	teardownTest := setupVpcTest(t)
-	defer teardownTest(t)
+	client := NewDefaultClient()
+	teardown := setup(t, client)
+	defer teardown(t)
 
-	vpc, _ := NewVpc(NewDefaultClient())
+	vpc, _ := NewVpc(client)
 	err := vpc.NewAcl().Remove()
 
 	assert.NotNil(t, err)
@@ -28,14 +35,48 @@ func TestAclRemoveNoVpc(t *testing.T) {
 
 // Default VPC always has network components such as ACL.
 func TestAclRemoveAclsExist(t *testing.T) {
-	teardownTest := setupAclTest(t)
-	defer teardownTest(t)
+	client := NewDefaultClient()
+	teardown := setupVpc(t, client)
+	defer teardown(t)
 
-	vpc, _ := NewVpc(NewDefaultClient())
-	test.CreateAcls(vpc.Id)
+	vpc, _ := NewVpc(client)
+	createAcls(vpc)
 	err := vpc.NewAcl().Remove()
-	acls := test.ListAcls(vpc.Id)
+	acls := listAcls(vpc)
 
 	assert.Nil(t, err)
 	assert.Empty(t, acls)
+}
+
+func createAcls(vpc *Vpc) {
+	for i := 0; i < 5; i++ {
+		_, err := vpc.Client.CreateNetworkAcl(
+			context.TODO(),
+			&ec2.CreateNetworkAclInput{
+				VpcId: vpc.Id,
+			},
+		)
+		if err != nil {
+			panic(err)
+		}
+	}
+}
+
+func listAcls(vpc *Vpc) []types.NetworkAcl {
+	out, err := vpc.Client.DescribeNetworkAcls(
+		context.TODO(),
+		&ec2.DescribeNetworkAclsInput{
+			Filters: []types.Filter{
+				{
+					Name:   aws.String("vpc-id"),
+					Values: []string{*vpc.Id},
+				},
+			},
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+
+	return out.NetworkAcls
 }
