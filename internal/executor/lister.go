@@ -27,7 +27,7 @@ func ListVpcs() error {
 		}
 	}
 
-	presenter.TableFrom(regionVpc)
+	presenter.TableFrom(regionVpc, [2]string{"Region", "Default VPC"})
 
 	return nil
 }
