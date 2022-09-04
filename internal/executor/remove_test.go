@@ -3,51 +3,54 @@ package executor
 import (
 	"testing"
 
+	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	"github.com/knakayama/dv/internal/entity"
 	"github.com/knakayama/dv/test"
 	"github.com/stretchr/testify/assert"
 )
 
+func setup(_ *testing.T, client *ec2.Client) func(_ *testing.T) {
+	test.RemoveVpcs(client)
+	test.CreateDefaultVpc(client)
+
+	return func(_ *testing.T) {
+		test.RemoveVpcs(client)
+	}
+}
+
 func TestRemoverValidateRegionInvalidRegion(t *testing.T) {
-	err := validateRegion(test.Region())
+	err := validateRegion(test.InvalidRegion())
 
 	assert.ErrorIs(t, err, entity.ErrUnknownRegion)
 }
 
 func TestRemoverValidateRegionValidRegion(t *testing.T) {
-	for _, tt := range []string{
-		"af-south-1",
-		"eu-north-1",
-		"ap-south-1",
-		"eu-west-3",
-		"eu-west-2",
-		"eu-south-1",
-		"eu-west-1",
-		"ap-northeast-3",
-		"ap-northeast-2",
-		"me-south-1",
-		"ap-northeast-1",
-		"me-central-1",
-		"sa-east-1",
-		"ca-central-1",
-		"ap-east-1",
-		"ap-southeast-1",
-		"ap-southeast-2",
-		"ap-southeast-3",
-		"eu-central-1",
-		"us-east-1",
-		"us-east-2",
-		"us-west-1",
-		"us-west-2",
-	} {
+	for _, tt := range test.ValidRegions() {
 		err := validateRegion(tt)
 
 		assert.Nil(t, err)
 	}
 }
 
-func TestRemoverNetworkComponentsYesIsFalse(t *testing.T) {
-	err := removeNetworkComponents(test.Region(), &entity.Vpc{}, false)
+func TestRemoveRemoverNetworkComponentsYesIsFalse(t *testing.T) {
+	err := removeNetworkComponents(test.InvalidRegion(), &entity.Vpc{}, false)
+
+	assert.Nil(t, err)
+}
+
+func TestRemoveRemoveVpcNoVpc(t *testing.T) {
+	test.RemoveVpcs(entity.NewDefaultClient())
+	err := RemoveVpc(test.ValidRegion(), true)
+
+	assert.ErrorIs(t, err, entity.ErrVpcNotFound)
+}
+
+func TestRemoveRemoveVpcVpcExists(t *testing.T) {
+	client := entity.NewDefaultClient()
+	teardown := setup(t, client)
+	defer teardown(t)
+
+	err := RemoveVpc(test.ValidRegion(), true)
 
 	assert.Nil(t, err)
 }
