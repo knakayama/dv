@@ -3,14 +3,13 @@ package executor
 import (
 	"testing"
 
-	"github.com/jaswdr/faker"
 	"github.com/knakayama/dv/internal/entity"
+	"github.com/knakayama/dv/test"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestRemoverValidateRegionInvalidRegion(t *testing.T) {
-	faker := faker.New()
-	err := validateRegion(faker.RandomLetter())
+	err := validateRegion(test.Region())
 
 	assert.ErrorIs(t, err, entity.ErrUnknownRegion)
 }
@@ -45,4 +44,10 @@ func TestRemoverValidateRegionValidRegion(t *testing.T) {
 
 		assert.Nil(t, err)
 	}
+}
+
+func TestRemoverNetworkComponentsYesIsFalse(t *testing.T) {
+	err := removeNetworkComponents(test.Region(), &entity.Vpc{}, false)
+
+	assert.Nil(t, err)
 }
