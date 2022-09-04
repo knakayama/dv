@@ -39,6 +39,10 @@ func (i *Igw) ids() ([]*string, error) {
 }
 
 func (i *Igw) Remove() error {
+	if i.vpc.Id == nil {
+		return nil
+	}
+
 	igwIds, _ := i.ids()
 
 	for _, igwId := range igwIds {

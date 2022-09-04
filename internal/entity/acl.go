@@ -39,6 +39,10 @@ func (acl *Acl) ids() ([]*string, error) {
 }
 
 func (acl *Acl) Remove() error {
+	if acl.vpc.Id == nil {
+		return nil
+	}
+
 	aclIds, _ := acl.ids()
 
 	for _, aclId := range aclIds {

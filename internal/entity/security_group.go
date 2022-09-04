@@ -39,6 +39,10 @@ func (s *SecurityGroup) ids() ([]*string, error) {
 }
 
 func (s *SecurityGroup) Remove() error {
+	if s.vpc.Id == nil {
+		return nil
+	}
+
 	sgIds, _ := s.ids()
 
 	for _, sgId := range sgIds {

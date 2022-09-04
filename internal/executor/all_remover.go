@@ -15,6 +15,11 @@ func RemoveVpcs(yes bool) error {
 		if err != nil {
 			return err
 		}
+
+		if vpc.Id == nil {
+			continue
+		}
+
 		if err := removeNetworkComponents(*r.RegionName, vpc, yes); err != nil {
 			return err
 		}

@@ -39,6 +39,10 @@ func (r *RouteTable) ids() ([]*string, error) {
 }
 
 func (r *RouteTable) Remove() error {
+	if r.vpc.Id == nil {
+		return nil
+	}
+
 	routeTableIds, _ := r.ids()
 
 	for _, routeTableId := range routeTableIds {

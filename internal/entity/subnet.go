@@ -39,6 +39,10 @@ func (s *Subnet) ids() ([]*string, error) {
 }
 
 func (s *Subnet) Remove() error {
+	if s.vpc.Id == nil {
+		return nil
+	}
+
 	subnetIds, _ := s.ids()
 
 	for _, subnetId := range subnetIds {
