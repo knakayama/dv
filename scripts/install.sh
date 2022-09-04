@@ -1,28 +1,29 @@
 #!/usr/bin/env bash -xeou pipefail
 
-TOOLS_DIR="$(cd ${0%/*}/../tools && pwd -P)"
+BIN_DIR="$(dirname ${0%/*})/bin"
+[[ -d "$BIN_DIR" ]] || mkdir "$BIN_DIR"
 
 if ! type "localstack" &>/dev/null; then
   # TODO: How can we pin a version with pipx?
   pipx install localstack
 fi
 
-if [[ ! -x "${TOOLS_DIR}/golangci-lint" ]]; then
+if [[ ! -x "${BIN_DIR}/golangci-lint" ]]; then
   curl -sSfL "https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh" | sh -s "v1.49.0"
 fi
 
-if [[ ! -x "${TOOLS_DIR}/task" ]]; then
-  sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b "$TOOLS_DIR" "v3.14.1"
+if [[ ! -x "${BIN_DIR}/task" ]]; then
+  sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b "$BIN_DIR" "v3.14.1"
 fi
 
-if [[ ! -x "${TOOLS_DIR}/gofumpt" ]]; then
+if [[ ! -x "${BIN_DIR}/gofumpt" ]]; then
   curl \
     -sSfL "https://github.com/mvdan/gofumpt/releases/download/v0.3.1/gofumpt_v0.3.1_darwin_amd64" \
-    -o "${TOOLS_DIR}/gofumpt"
-  chmod +x "${TOOLS_DIR}/gofumpt"
+    -o "${BIN_DIR}/gofumpt"
+  chmod +x "${BIN_DIR}/gofumpt"
 fi
 
-ec_path="${TOOLS_DIR}/ec"
+ec_path="${BIN_DIR}/ec"
 if [[ ! -x "$ec_path" ]]; then
   tmp_path="$(mktemp)"
   curl \
@@ -32,7 +33,7 @@ if [[ ! -x "$ec_path" ]]; then
   chmod +x "$ec_path"
 fi
 
-gitleaks_path="${TOOLS_DIR}/gitleaks"
+gitleaks_path="${BIN_DIR}/gitleaks"
 if [[ ! -x "$gitleaks_path" ]]; then
   tmp_path="$(mktemp)"
   curl \
