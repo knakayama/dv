@@ -27,7 +27,7 @@ func newRootCmd() *rootCmd {
 		cmd: &cobra.Command{
 			Use:   "dv",
 			Short: "Remove AWS default VPC(s)",
-			Long: `This command enables you to remove default VPC in all AWS regions.
+			Long: `This command enables you to remove default VPC(s) in all AWS regions.
 Aside from that, you can remove a VPC in each region.
 			`,
 			Version:       "0.0.1",
