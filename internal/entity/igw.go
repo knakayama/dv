@@ -48,7 +48,17 @@ func (i *Igw) Remove() error {
 	for _, igwId := range igwIds {
 		//nolint:forbidigo
 		fmt.Println(*igwId)
-		_, err := i.vpc.Client.DeleteInternetGateway(
+		_, err := i.vpc.Client.DetachInternetGateway(
+			context.TODO(),
+			&ec2.DetachInternetGatewayInput{
+				InternetGatewayId: igwId,
+				VpcId:             i.vpc.Id,
+			},
+		)
+		if err != nil {
+			return err
+		}
+		_, err = i.vpc.Client.DeleteInternetGateway(
 			context.TODO(),
 			&ec2.DeleteInternetGatewayInput{
 				InternetGatewayId: igwId,
