@@ -9,8 +9,7 @@ import (
 )
 
 func TestAllRemoverRemoveVpcsNoVpc(t *testing.T) {
-	client := entity.NewDefaultClient()
-	test.RemoveVpcs(client)
+	test.RemoveVpcs(entity.NewDefaultClient())
 
 	err := RemoveVpcs(true)
 
