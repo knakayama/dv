@@ -43,7 +43,7 @@ tasks:
 
   test:
     cmds:
-      - go test -v -run {{ .CLI_ARGS }} ./...
+      - go test -v -run {{.CLI_ARGS}} ./...
 
   test:all:
     cmds:
