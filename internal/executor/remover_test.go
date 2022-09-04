@@ -23,12 +23,6 @@ func TestRemoverValidateRegionValidRegion(t *testing.T) {
 	}
 }
 
-func TestRemoverRemoverNetworkComponentsYesIsFalse(t *testing.T) {
-	err := removeNetworkComponents(test.InvalidRegion(), &entity.Vpc{}, false)
-
-	assert.Nil(t, err)
-}
-
 func TestRemoverRemoveVpcNoVpc(t *testing.T) {
 	test.RemoveVpcs(entity.NewDefaultClient())
 	err := RemoveVpc(test.ValidRegion(), true)

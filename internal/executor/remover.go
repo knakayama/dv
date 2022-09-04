@@ -6,11 +6,11 @@ import (
 	"github.com/knakayama/dv/internal/entity"
 )
 
-func removeNetworkComponents(region string, vpc *entity.Vpc, yes bool) error {
+func removeNetworkComponents(vpc *entity.Vpc, yes bool) error {
 	if !yes {
 		// TODO: pretty print
 		//nolint:forbidigo
-		fmt.Printf("%s skipped...\n", region)
+		fmt.Println("dry-run mode, skipped...")
 		return nil
 	}
 
@@ -46,6 +46,8 @@ func RemoveVpc(region string, yes bool) error {
 		return err
 	}
 
+	//nolint:forbidigo
+	fmt.Printf("==> %s\n", region)
 	vpc, err := entity.NewVpc(entity.NewClient(region))
 	if err != nil {
 		return err
@@ -55,7 +57,7 @@ func RemoveVpc(region string, yes bool) error {
 		return entity.ErrVpcNotFound
 	}
 
-	if err := removeNetworkComponents(region, vpc, yes); err != nil {
+	if err := removeNetworkComponents(vpc, yes); err != nil {
 		return err
 	}
 

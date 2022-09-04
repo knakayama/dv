@@ -32,6 +32,12 @@ func (s *SecurityGroup) ids() ([]*string, error) {
 	}
 
 	for _, sg := range out.SecurityGroups {
+		// We can't delete Default security group
+		if *sg.GroupName == "default" {
+			//nolint:forbidigo
+			fmt.Printf("%s is Default security group, skipped...\n", *sg.GroupId)
+			continue
+		}
 		sgIds = append(sgIds, sg.GroupId)
 	}
 

@@ -32,6 +32,12 @@ func (r *RouteTable) ids() ([]*string, error) {
 	}
 
 	for _, routeTable := range out.RouteTables {
+		// We can't delete Main route table.
+		if *routeTable.Associations[0].Main {
+			//nolint:forbidigo
+			fmt.Printf("%s is Main route table, skipped...\n", *routeTable.RouteTableId)
+			continue
+		}
 		routeTableIds = append(routeTableIds, routeTable.RouteTableId)
 	}
 
