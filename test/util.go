@@ -25,7 +25,6 @@ func ValidRegions() []string {
 		"ap-northeast-2",
 		"me-south-1",
 		"ap-northeast-1",
-		"me-central-1",
 		"sa-east-1",
 		"ca-central-1",
 		"ap-east-1",
