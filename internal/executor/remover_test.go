@@ -22,20 +22,20 @@ func TestRemoverValidateRegionValidRegion(t *testing.T) {
 	}
 }
 
-func TestRemoveRemoverNetworkComponentsYesIsFalse(t *testing.T) {
+func TestRemoverRemoverNetworkComponentsYesIsFalse(t *testing.T) {
 	err := removeNetworkComponents(test.InvalidRegion(), &entity.Vpc{}, false)
 
 	assert.Nil(t, err)
 }
 
-func TestRemoveRemoveVpcNoVpc(t *testing.T) {
+func TestRemoverRemoveVpcNoVpc(t *testing.T) {
 	test.RemoveVpcs(entity.NewDefaultClient())
 	err := RemoveVpc(test.ValidRegion(), true)
 
 	assert.ErrorIs(t, err, entity.ErrVpcNotFound)
 }
 
-func TestRemoveRemoveVpcVpcExists(t *testing.T) {
+func TestRemoverRemoveVpcVpcExists(t *testing.T) {
 	client := entity.NewDefaultClient()
 	test.RemoveVpcs(client)
 	test.CreateDefaultVpc(client)
