@@ -42,3 +42,13 @@ if [[ ! -x "$gitleaks_path" ]]; then
   tar xzpvf "$tmp_path" "gitleaks"
   mv -v "gitleaks" "$gitleaks_path"
 fi
+
+goreleaser_path="${BIN_DIR}/goreleaser"
+if [[ ! -x "$goreleaser_path" ]]; then
+  tmp_path="$(mktemp)"
+  curl \
+    -sSfL "https://github.com/goreleaser/goreleaser/releases/download/v1.11.2/goreleaser_Darwin_x86_64.tar.gz" \
+    -o "$tmp_path"
+  tar xzpvf "$tmp_path" "goreleaser"
+  mv -v "goreleaser" "$goreleaser_path"
+fi
