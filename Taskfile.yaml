@@ -44,7 +44,13 @@ tasks:
   test:
     cmds:
       - go test -v -run {{.CLI_ARGS}} ./...
+    env:
+      AWS_ENDPOINT: "http://localhost:4566"
+      DEFAULT_REGION: "ap-northeast-1"
 
   test:all:
     cmds:
       - go test -v ./...
+    env:
+      AWS_ENDPOINT: "http://localhost:4566"
+      DEFAULT_REGION: "ap-northeast-1"
