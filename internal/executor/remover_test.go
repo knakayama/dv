@@ -1,6 +1,7 @@
 package executor
 
 import (
+	"os"
 	"testing"
 
 	"github.com/knakayama/dv/internal/entity"
@@ -40,7 +41,7 @@ func TestRemoverRemoveVpcVpcExists(t *testing.T) {
 	test.RemoveVpcs(client)
 	test.CreateDefaultVpc(client)
 
-	err := RemoveVpc(test.ValidRegion(), true)
+	err := RemoveVpc(os.Getenv("DEFAULT_REGION"), true)
 
 	assert.Nil(t, err)
 }
