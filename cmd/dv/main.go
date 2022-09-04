@@ -7,5 +7,5 @@ import (
 )
 
 func main() {
-	command.Execute(os.Args[1:])
+	command.Execute(os.Args[1:], os.Exit)
 }

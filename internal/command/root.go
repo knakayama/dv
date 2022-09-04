@@ -7,11 +7,12 @@ import (
 )
 
 type rootCmd struct {
-	cmd *cobra.Command
+	cmd  *cobra.Command
+	exit func(int)
 }
 
-func Execute(args []string) {
-	newRootCmd().Execute(args)
+func Execute(args []string, exit func(int)) {
+	newRootCmd(exit).Execute(args)
 }
 
 func (cmd *rootCmd) Execute(args []string) {
@@ -19,10 +20,12 @@ func (cmd *rootCmd) Execute(args []string) {
 
 	if err := cmd.cmd.Execute(); err != nil {
 		log.Fatalf("Failed to execute, %v", err)
+		// TODO: Add a feature to pass an appropriate code from callees
+		cmd.exit(1)
 	}
 }
 
-func newRootCmd() *rootCmd {
+func newRootCmd(exit func(int)) *rootCmd {
 	root := &rootCmd{
 		cmd: &cobra.Command{
 			Use:   "dv",
@@ -33,7 +36,9 @@ Aside from that, you can remove a VPC in each region.
 			Version:       "0.0.1",
 			SilenceUsage:  true,
 			SilenceErrors: true,
+			Args:          cobra.NoArgs,
 		},
+		exit: exit,
 	}
 
 	root.cmd.AddCommand(
