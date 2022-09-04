@@ -35,7 +35,7 @@ func (acl *Acl) ids() ([]*string, error) {
 		// We can't delete Default ACL
 		if *acl.IsDefault {
 			//nolint:forbidigo
-			fmt.Printf("%s is default ACL, skipped...\n", *acl.NetworkAclId)
+			fmt.Printf("%s is Default ACL, skipped...\n", *acl.NetworkAclId)
 			continue
 		}
 		aclIds = append(aclIds, acl.NetworkAclId)
