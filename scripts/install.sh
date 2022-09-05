@@ -1,4 +1,6 @@
-#!/usr/bin/env bash -xeou pipefail
+#!/usr/bin/env bash
+
+set -xeou pipefail
 
 BIN_DIR="$(dirname ${0%/*})/bin"
 [[ -d "$BIN_DIR" ]] || mkdir "$BIN_DIR"

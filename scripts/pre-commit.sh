@@ -1,4 +1,6 @@
-#!/usr/bin/env bash -xeuo pipefail
+#!/usr/bin/env bash
+
+set -xeuo pipefail
 
 task lint
 
