@@ -36,5 +36,5 @@ jobs:
       - run: pip install localstack
       - run: |
           task aws:start
-          task test
+          task test:all
 
