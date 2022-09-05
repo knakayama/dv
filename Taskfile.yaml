@@ -54,3 +54,7 @@ tasks:
     env:
       AWS_ENDPOINT: "http://localhost:4566"
       DEFAULT_REGION: "ap-northeast-1"
+
+  build:
+    cmds:
+      - go build -v ./...
