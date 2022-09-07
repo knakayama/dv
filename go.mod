@@ -8,7 +8,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/ec2 v1.54.4
 	github.com/jaswdr/faker v1.15.0
 	github.com/jedib0t/go-pretty/v6 v6.3.8
-	github.com/stretchr/testify v1.7.4
+	github.com/stretchr/testify v1.8.0
 )
 
 require (
