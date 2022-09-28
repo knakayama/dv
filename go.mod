@@ -15,6 +15,7 @@ require (
 	github.com/jedib0t/go-pretty/v6 v6.3.9
 	github.com/stretchr/testify v1.8.0
 	github.com/zricethezav/gitleaks/v8 v8.13.0
+	golang.org/x/vuln v0.0.0-20220923181559-cbe0a6944b8b
 	mvdan.cc/gofumpt v0.4.0
 )
 
@@ -297,7 +298,7 @@ require (
 	golang.org/x/term v0.0.0-20210927222741-03fcf44c2211 // indirect
 	golang.org/x/text v0.3.7 // indirect
 	golang.org/x/time v0.0.0-20220722155302-e5dcc9cfc0b9 // indirect
-	golang.org/x/tools v0.1.12 // indirect
+	golang.org/x/tools v0.1.13-0.20220803210227-8b9a1fbdf5c3 // indirect
 	golang.org/x/xerrors v0.0.0-20220609144429-65e65417b02f // indirect
 	google.golang.org/api v0.84.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
