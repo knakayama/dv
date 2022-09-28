@@ -23,7 +23,7 @@ tasks:
 
   lint:ec:
     cmds:
-      - ec
+      - editorconfig-checker
 
   lint:golangci-lint:
     cmds:
