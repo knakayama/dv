@@ -1,6 +1,10 @@
 version: "3"
 
 tasks:
+  aws:setup:
+    cmds:
+      - ./scripts/install.sh
+
   aws:start:
     cmds:
       - localstack start -d
@@ -33,13 +37,9 @@ tasks:
     cmds:
       - gitleaks detect
 
-  lint:setup:
+  git:setup:
     cmds:
       - cp -pvf ./scripts/pre-commit.sh .git/hooks/pre-commit
-
-  bin:install:
-    cmds:
-      - ./scripts/install.sh
 
   test:
     cmds:
@@ -66,3 +66,7 @@ tasks:
   go:mod:
     cmds:
       - go mod tidy
+
+  go:vuln:
+    cmds:
+      - govulncheck ./...

@@ -8,5 +8,6 @@ import (
 	_ "github.com/golangci/golangci-lint/cmd/golangci-lint"
 	_ "github.com/goreleaser/goreleaser"
 	_ "github.com/zricethezav/gitleaks/v8"
+	_ "golang.org/x/vuln/cmd/govulncheck"
 	_ "mvdan.cc/gofumpt"
 )
