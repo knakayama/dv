@@ -59,14 +59,14 @@ tasks:
       AWS_ACCESS_KEY_ID: fake
       AWS_SECRET_ACCESS_KEY: fake
 
-  go:build:
+  test:vul:
+    cmds:
+      - govulncheck ./...
+
+  build:
     cmds:
       - go build -v ./...
 
-  go:mod:
+  mod:
     cmds:
       - go mod tidy
-
-  go:vuln:
-    cmds:
-      - govulncheck ./...
