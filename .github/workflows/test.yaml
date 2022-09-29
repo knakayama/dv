@@ -28,8 +28,8 @@ jobs:
         with:
           version: "3.14.1"
       - run: |
-          task go:mod
-          task go:build
+          task mod
+          task build
       - uses: actions/setup-python@v4
         with:
           python-version: "3.10"
