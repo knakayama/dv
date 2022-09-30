@@ -5,8 +5,7 @@ go 1.19
 require (
 	github.com/aws/aws-sdk-go-v2 v1.16.16
 	github.com/aws/aws-sdk-go-v2/config v1.17.6
-	github.com/aws/aws-sdk-go-v2/service/ec2 v1.60.0
-	github.com/aws/aws-sdk-go-v2/service/s3 v1.27.11
+	github.com/aws/aws-sdk-go-v2/service/ec2 v1.61.0
 	github.com/editorconfig-checker/editorconfig-checker v0.0.0-20220920070755-30954c5b6e37
 	github.com/go-task/task/v3 v3.15.2
 	github.com/golangci/golangci-lint v1.49.0
@@ -67,6 +66,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/internal/checksum v1.1.18 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.13.17 // indirect
 	github.com/aws/aws-sdk-go-v2/service/kms v1.16.3 // indirect
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.27.11 // indirect
 	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.13.4 // indirect
 	github.com/aymanbagabas/go-osc52 v1.0.3 // indirect
 	github.com/baulk/chardet v0.1.0 // indirect
