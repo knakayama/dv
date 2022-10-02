@@ -7,7 +7,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/config v1.17.6
 	github.com/aws/aws-sdk-go-v2/service/ec2 v1.61.0
 	github.com/editorconfig-checker/editorconfig-checker v0.0.0-20220920070755-30954c5b6e37
-	github.com/go-task/task/v3 v3.15.2
+	github.com/go-task/task/v3 v3.16.0
 	github.com/golangci/golangci-lint v1.49.0
 	github.com/goreleaser/goreleaser v1.11.4
 	github.com/jaswdr/faker v1.15.0
