@@ -20,6 +20,41 @@ archives:
 checksum:
   name_template: 'checksums.txt'
 
+signs:
+  - cmd: cosign
+    env:
+      - COSIGN_EXPERIMENTAL=1
+    signature: '${artifact}.keyless.sig'
+    certificate: '${artifact}.pem'
+    output: true
+    artifacts: checksum
+    args:
+      - sign-blob
+      - '--output-certificate=${certificate}'
+      - '--output-signature=${signature}'
+      - '${artifact}'
+
+brews:
+  - tap:
+      owner: knakayama
+      name: homebrew-tap
+      token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
+    folder: Formula
+    goarm: 7
+    homepage:  https://github.com/knakayama/dv
+    description: A command line tool to remove AWS default VPC(s)
+    license: MIT
+    commit_author:
+      name: "knakayama"
+      email: knakayama.sh@gmail.com
+    test: |
+      system "#{bin}/dv -v"
+    dependencies:
+      - name: go
+        type: optional
+    install: |
+      bin.install "dv"
+
 snapshot:
   name_template: "{{ incpatch .Version }}-next"
 

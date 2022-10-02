@@ -7,6 +7,7 @@ import (
 	_ "github.com/go-task/task/v3/cmd/task"
 	_ "github.com/golangci/golangci-lint/cmd/golangci-lint"
 	_ "github.com/goreleaser/goreleaser"
+	_ "github.com/sigstore/cosign/cmd/cosign"
 	_ "github.com/zricethezav/gitleaks/v8"
 	_ "golang.org/x/vuln/cmd/govulncheck"
 	_ "mvdan.cc/gofumpt"
