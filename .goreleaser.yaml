@@ -38,6 +38,7 @@ brews:
   - tap:
       owner: knakayama
       name: homebrew-tap
+      token: "{{ secrets.HOMEBREW_TAP_TOKEN }}"
     folder: Formula
     goarm: 7
     homepage:  https://github.com/knakayama/dv
