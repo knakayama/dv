@@ -43,6 +43,9 @@ brews:
     homepage:  https://github.com/knakayama/dv
     description: A command line tool to remove AWS default VPC(s)
     license: MIT
+    commit_author:
+      name: "knakayama"
+      email: knakayama.sh@gmail.com
     test: |
       system "#{bin}/dv -v"
     dependencies:
