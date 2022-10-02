@@ -34,6 +34,23 @@ signs:
       - '--output-signature=${signature}'
       - '${artifact}'
 
+brews:
+  - tap:
+      owner: knakayama
+      name: homebrew-tap
+    folder: Formula
+    goarm: 7
+    homepage:  https://github.com/knakayama/dv
+    description: A command line tool to remove AWS default VPC(s)
+    license: MIT
+    test: |
+      system "#{bin}/dv -v"
+    dependencies:
+      - name: go
+        type: optional
+    install: |
+      bin.install "dv"
+
 snapshot:
   name_template: "{{ incpatch .Version }}-next"
 
