@@ -13,6 +13,7 @@ $ brew install knakayama/tap/dv
 ## Usage
 
 ```bash
+$ dv help
 This command enables you to remove default VPC(s) in all AWS regions.
 Aside from that, you can remove a VPC in each region.
 
@@ -28,6 +29,8 @@ Available Commands:
 
 Flags:
   -h, --help   help for dv
+
+Use "dv [command] --help" for more information about a command.
 ```
 
 ## TODOs
