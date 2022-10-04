@@ -9,7 +9,7 @@ require (
 	github.com/editorconfig-checker/editorconfig-checker v0.0.0-20220920070755-30954c5b6e37
 	github.com/go-task/task/v3 v3.16.0
 	github.com/golangci/golangci-lint v1.49.0
-	github.com/goreleaser/goreleaser v1.11.4
+	github.com/goreleaser/goreleaser v1.11.5
 	github.com/jaswdr/faker v1.15.0
 	github.com/jedib0t/go-pretty/v6 v6.4.0
 	github.com/sigstore/cosign v1.12.1
@@ -219,7 +219,7 @@ require (
 	github.com/google/go-cmp v0.5.9 // indirect
 	github.com/google/go-containerregistry v0.11.0 // indirect
 	github.com/google/go-github/v45 v45.2.0 // indirect
-	github.com/google/go-github/v47 v47.0.0 // indirect
+	github.com/google/go-github/v47 v47.1.0 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/google/gofuzz v1.2.0 // indirect
 	github.com/google/rpmpack v0.0.0-20220314092521-38642b5e571e // indirect

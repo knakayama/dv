@@ -1028,8 +1028,8 @@ github.com/google/go-containerregistry v0.11.0/go.mod h1:BBaYtsHPHA42uEgAvd/Nejv
 github.com/google/go-github/v28 v28.1.1/go.mod h1:bsqJWQX05omyWVmc00nEUql9mhQyv38lDZ8kPZcQVoM=
 github.com/google/go-github/v45 v45.2.0 h1:5oRLszbrkvxDDqBCNj2hjDZMKmvexaZ1xw/FCD+K3FI=
 github.com/google/go-github/v45 v45.2.0/go.mod h1:FObaZJEDSTa/WGCzZ2Z3eoCDXWJKMenWWTrd8jrta28=
-github.com/google/go-github/v47 v47.0.0 h1:eQap5bIRZibukP0VhngWgpuM0zhY4xntqOzn6DhdkE4=
-github.com/google/go-github/v47 v47.0.0/go.mod h1:DRjdvizXE876j0YOZwInB1ESpOcU/xFBClNiQLSdorE=
+github.com/google/go-github/v47 v47.1.0 h1:Cacm/WxQBOa9lF0FT0EMjZ2BWMetQ1TQfyurn4yF1z8=
+github.com/google/go-github/v47 v47.1.0/go.mod h1:VPZBXNbFSJGjyjFRUKo9vZGawTajnWzC/YjGw/oFKi0=
 github.com/google/go-licenses v0.0.0-20210329231322-ce1d9163b77d/go.mod h1:+TYOmkVoJOpwnS0wfdsJCV9CoD5nJYsHoFk/0CrTK4M=
 github.com/google/go-querystring v1.0.0/go.mod h1:odCYkC5MyYFN7vkCjXpyrEuKhc/BUO6wN/zVPAxq5ck=
 github.com/google/go-querystring v1.1.0 h1:AnCroh3fv4ZBgVIf1Iwtovgjaw/GiKJo8M8yD/fhyJ8=
@@ -1125,8 +1125,8 @@ github.com/goreleaser/chglog v0.2.2/go.mod h1:2s5JwtCOWjZa8AIneL+xdUl9SRuigCjRHN
 github.com/goreleaser/fileglob v1.3.0 h1:/X6J7U8lbDpQtBvGcwwPS6OpzkNVlVEsFUVRx9+k+7I=
 github.com/goreleaser/fileglob v1.3.0/go.mod h1:Jx6BoXv3mbYkEzwm9THo7xbr5egkAraxkGorbJb4RxU=
 github.com/goreleaser/goreleaser v0.134.0/go.mod h1:ZT6Y2rSYa6NxQzIsdfWWNWAlYGXGbreo66NmE+3X3WQ=
-github.com/goreleaser/goreleaser v1.11.4 h1:bmXfkrBa6xv3WzzZM7U0QCOmpFAanIm+91tFB4DYUnI=
-github.com/goreleaser/goreleaser v1.11.4/go.mod h1:bkcZB72KGQK5mg+TvmFS+0n1tRJ2ZioUUm0lTefb/uo=
+github.com/goreleaser/goreleaser v1.11.5 h1:b4OReinilkNM28t8DIJncnzPzqnHCAemzux0TABL+TU=
+github.com/goreleaser/goreleaser v1.11.5/go.mod h1:J+nqBKEUTeKnX8v5RmMTu8Up+ZHHKGM//PZEEaavLc4=
 github.com/goreleaser/nfpm v1.2.1/go.mod h1:TtWrABZozuLOttX2uDlYyECfQX7x5XYkVxhjYcR6G9w=
 github.com/goreleaser/nfpm/v2 v2.18.1 h1:TuZQvnOLCXVv/wdDwS1luoQKRQo0vtjwP09YWcXMhR8=
 github.com/goreleaser/nfpm/v2 v2.18.1/go.mod h1:CCNOctcFfuzGLbaA8D4trDCa4xfSMtp9uoempUcG8gE=
