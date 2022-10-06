@@ -63,6 +63,10 @@ tasks:
     cmds:
       - govulncheck ./...
 
+  test:vul:install:
+    cmds:
+      - go install golang.org/x/vuln/cmd/govulncheck
+
   build:
     cmds:
       - go build -v ./...
