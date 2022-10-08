@@ -6,6 +6,7 @@ require (
 	github.com/aws/aws-sdk-go-v2 v1.16.16
 	github.com/aws/aws-sdk-go-v2/config v1.17.8
 	github.com/aws/aws-sdk-go-v2/service/ec2 v1.63.1
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.27.11
 	github.com/editorconfig-checker/editorconfig-checker v0.0.0-20220920070755-30954c5b6e37
 	github.com/go-task/task/v3 v3.16.0
 	github.com/golangci/golangci-lint v1.50.0
@@ -90,7 +91,6 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/internal/checksum v1.1.18 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.13.17 // indirect
 	github.com/aws/aws-sdk-go-v2/service/kms v1.18.9 // indirect
-	github.com/aws/aws-sdk-go-v2/service/s3 v1.27.11 // indirect
 	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.13.6 // indirect
 	github.com/awslabs/amazon-ecr-credential-helper/ecr-login v0.0.0-20220228164355-396b2034c795 // indirect
 	github.com/aymanbagabas/go-osc52 v1.0.3 // indirect
