@@ -2163,8 +2163,8 @@ github.com/zalando/go-keyring v0.1.0/go.mod h1:RaxNwUITJaHVdQ0VC7pELPZ3tOWn13nr0
 github.com/zeebo/errs v1.2.2 h1:5NFypMTuSdoySVTqlNs1dEoU21QVamMQJxW/Fii5O7g=
 github.com/zeebo/errs v1.2.2/go.mod h1:sgbWHsvVuTPHcqJJGQ1WhI5KbWlHYz+2+2C/LSEtCw4=
 github.com/zenazn/goji v0.9.0/go.mod h1:7S9M489iMyHBNxwZnk9/EHS098H4/F6TATF2mIxtB1Q=
-github.com/zricethezav/gitleaks/v8 v8.13.0 h1:UkJn3vZ7a0AzXvfQOGbzV+4rxL3ojkmapvLcPn1WXXI=
-github.com/zricethezav/gitleaks/v8 v8.13.0/go.mod h1:hCIn/PSXsukHPi387Ac7Nq6ZSLEZifgRqyOHASRLpJM=
+github.com/zricethezav/gitleaks/v8 v8.14.0 h1:lcfxo//I/S0wHlGPlM2T9Op3DBFWMaeNq/ZEoolEaWo=
+github.com/zricethezav/gitleaks/v8 v8.14.0/go.mod h1:JzsbTtA88h1ioImguqG0BL2IV2JfblVO0qj/LSwgUKQ=
 gitlab.com/bosi/decorder v0.2.3 h1:gX4/RgK16ijY8V+BRQHAySfQAb354T7/xQpDB2n10P0=
 gitlab.com/bosi/decorder v0.2.3/go.mod h1:9K1RB5+VPNQYtXtTDAzd2OEftsZb1oV0IrJrzChSdGE=
 gitlab.com/digitalxero/go-conventional-commit v1.0.7 h1:8/dO6WWG+98PMhlZowt/YjuiKhqhGlOCwlIV8SqqGh8=
