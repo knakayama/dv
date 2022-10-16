@@ -14,7 +14,7 @@ require (
 	github.com/jedib0t/go-pretty/v6 v6.4.0
 	github.com/sigstore/cosign v1.13.0
 	github.com/stretchr/testify v1.8.0
-	github.com/zricethezav/gitleaks/v8 v8.13.0
+	github.com/zricethezav/gitleaks/v8 v8.15.0
 	golang.org/x/vuln v0.0.0-20220923181559-cbe0a6944b8b
 	mvdan.cc/gofumpt v0.4.0
 )
