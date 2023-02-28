@@ -11,7 +11,7 @@ require (
 	github.com/golangci/golangci-lint v1.50.0
 	github.com/goreleaser/goreleaser v1.15.0
 	github.com/jaswdr/faker v1.15.0
-	github.com/jedib0t/go-pretty/v6 v6.4.0
+	github.com/jedib0t/go-pretty/v6 v6.4.6
 	github.com/sigstore/cosign v1.13.1
 	github.com/stretchr/testify v1.8.1
 	github.com/zricethezav/gitleaks/v8 v8.15.0
